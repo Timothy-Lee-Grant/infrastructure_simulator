@@ -919,7 +919,7 @@ function deleteConn(id) {
 // ═══════════════════════════════════════════════════════════
 
 function setMode(m) {
-  if (S.sim.on) stopSim();
+  if (S.sim.on && m !== 'select') stopSim();
   S.mode = m;
   S.connFrom = null;
   document.body.className = `mode-${m}`;
