@@ -22,396 +22,362 @@ body {
 #header {
   background: #161b22;
   border-bottom: 1px solid #30363d;
-  padding: 0 16px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  height: 50px;
+  gap: 8px;
+  height: 48px;
   flex-shrink: 0;
 }
-
-#header h1 {
-  font-size: 15px;
-  font-weight: 700;
-  color: #58a6ff;
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-}
-
-.hdr-sep { width: 1px; height: 22px; background: #30363d; flex-shrink: 0; }
-
+#header h1 { font-size: 14px; font-weight: 700; color: #58a6ff; white-space: nowrap; }
+.hdr-sep { width: 1px; height: 20px; background: #30363d; flex-shrink: 0; }
 .hdr-btn {
-  padding: 5px 12px;
+  padding: 4px 10px;
   border: 1px solid #30363d;
   border-radius: 6px;
   background: #21262d;
   color: #c9d1d9;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   transition: all 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+  display: flex; align-items: center; gap: 4px;
   white-space: nowrap;
 }
 .hdr-btn:hover { background: #30363d; border-color: #8b949e; }
+.hdr-btn:disabled { opacity: 0.4; cursor: default; }
 .hdr-btn.active { background: #1f6feb; border-color: #58a6ff; color: #fff; }
 .hdr-btn.connect-btn.active { background: #5a3825; border-color: #ffa657; color: #ffa657; }
 .hdr-btn.delete-btn { color: #f85149; border-color: #f8514930; }
-.hdr-btn.delete-btn:hover { background: #3d1111; border-color: #f85149; }
-.hdr-btn.delete-btn.active { background: #3d1111; border-color: #f85149; }
+.hdr-btn.delete-btn:hover, .hdr-btn.delete-btn.active { background: #3d1111; border-color: #f85149; }
+.hdr-btn.break-btn { color: #bc8cff; border-color: #bc8cff30; }
+.hdr-btn.break-btn:hover, .hdr-btn.break-btn.active { background: #2d1a4a; border-color: #bc8cff; }
 .hdr-btn.sim-btn { color: #3fb950; border-color: #3fb95030; }
 .hdr-btn.sim-btn:hover { background: #1a3d2a; border-color: #3fb950; }
 .hdr-btn.sim-btn.active { background: #238636; border-color: #3fb950; color: #fff; }
-
 .kbd {
-  font-size: 9px;
-  background: #0d1117;
-  border: 1px solid #30363d;
-  border-radius: 3px;
-  padding: 1px 4px;
-  color: #8b949e;
+  font-size: 8px; background: #0d1117; border: 1px solid #30363d;
+  border-radius: 3px; padding: 1px 3px; color: #8b949e;
 }
+#header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+#level-sel {
+  background: #21262d; border: 1px solid #30363d; border-radius: 6px;
+  color: #c9d1d9; font-size: 11px; padding: 4px 8px; cursor: pointer;
+}
+#level-sel:focus { outline: none; border-color: #58a6ff; }
+#zoom-pct { font-size: 11px; color: #8b949e; width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
 
-#header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-
-/* ── Main ───────────────────────────────────────────────── */
+/* ── Body / Layout ───────────────────────────────────────── */
 #main { display: flex; flex: 1; overflow: hidden; }
 
 /* ── Palette ────────────────────────────────────────────── */
 #palette {
-  width: 190px;
-  background: #161b22;
-  border-right: 1px solid #30363d;
-  overflow-y: auto;
-  flex-shrink: 0;
-  padding: 10px 6px;
+  width: 186px; background: #161b22; border-right: 1px solid #30363d;
+  overflow-y: auto; flex-shrink: 0; padding: 8px 6px;
 }
-
 #palette::-webkit-scrollbar { width: 4px; }
-#palette::-webkit-scrollbar-track { background: transparent; }
 #palette::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
-
-.pal-section { margin-bottom: 14px; }
+.pal-section { margin-bottom: 12px; }
 .pal-section-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.9px;
-  color: #6e7681;
-  padding: 0 6px 5px;
-  font-weight: 600;
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.9px;
+  color: #6e7681; padding: 0 6px 4px; font-weight: 600;
 }
-
 .pal-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 8px;
-  border-radius: 7px;
-  cursor: grab;
-  transition: background 0.12s;
-  margin-bottom: 1px;
-  border: 1px solid transparent;
-  position: relative;
+  display: flex; align-items: center; gap: 7px; padding: 6px 8px;
+  border-radius: 7px; cursor: grab; transition: background 0.12s;
+  margin-bottom: 1px; border: 1px solid transparent;
 }
 .pal-item:hover { background: #21262d; border-color: #30363d; }
-.pal-item:active { cursor: grabbing; opacity: 0.7; }
+.pal-item.locked-type { opacity: 0.4; cursor: not-allowed; }
+.pal-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.pal-name { font-size: 11px; font-weight: 600; }
+.pal-hint { font-size: 9px; color: #8b949e; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.pal-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  flex-shrink: 0;
-  border: 1px solid transparent;
-}
-
-.pal-text { flex: 1; min-width: 0; }
-.pal-name { font-size: 12px; font-weight: 600; }
-.pal-hint { font-size: 10px; color: #8b949e; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* ── Center column (canvas + metrics) ──────────────────── */
+#center { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
 /* ── Canvas ─────────────────────────────────────────────── */
 #canvas-wrap {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
+  flex: 1; position: relative; overflow: hidden;
   background: #0d1117;
   background-image: radial-gradient(circle, #1c2128 1px, transparent 1px);
   background-size: 28px 28px;
 }
-
-#game-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
+#game-svg { width: 100%; height: 100%; display: block; }
 body.mode-select #game-svg { cursor: default; }
 body.mode-connect #game-svg { cursor: crosshair; }
 body.mode-delete #game-svg { cursor: not-allowed; }
+body.mode-break #game-svg { cursor: cell; }
+body.mode-panning #game-svg { cursor: grabbing !important; }
+
+/* ── Metrics Bar ─────────────────────────────────────────── */
+#metrics-bar {
+  height: 56px; background: #0d1420; border-top: 1px solid #1f3a5f;
+  display: none; align-items: stretch; flex-shrink: 0;
+  overflow: hidden;
+}
+#metrics-bar.visible { display: flex; }
+.m-group { display: flex; align-items: stretch; }
+.m-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 18px; min-width: 90px;
+}
+.m-label { font-size: 8px; text-transform: uppercase; letter-spacing: 0.9px; color: #3d6b9e; font-weight: 700; margin-bottom: 3px; }
+.m-val {
+  font-size: 20px; font-weight: 800; color: #58a6ff;
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.m-val.green { color: #3fb950; }
+.m-val.amber { color: #f0883e; }
+.m-val.red   { color: #f85149; }
+.m-val.dim   { color: #8b949e; font-size: 14px; }
+.m-unit { font-size: 9px; color: #3d6b9e; margin-top: 2px; }
+.m-sep { width: 1px; background: #1f3a5f; margin: 8px 0; }
+#m-explanation {
+  margin-left: auto; padding: 0 16px; font-size: 10px; color: #3d6b9e;
+  max-width: 160px; text-align: right; display: flex; align-items: center; line-height: 1.4;
+}
 
 /* ── Inspector ──────────────────────────────────────────── */
 #inspector {
-  width: 210px;
-  background: #161b22;
-  border-left: 1px solid #30363d;
-  overflow-y: auto;
-  flex-shrink: 0;
-  padding: 12px;
+  width: 216px; background: #161b22; border-left: 1px solid #30363d;
+  overflow-y: auto; flex-shrink: 0; padding: 12px;
 }
 #inspector::-webkit-scrollbar { width: 4px; }
-#inspector::-webkit-scrollbar-track { background: transparent; }
 #inspector::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
+.insp-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; color: #6e7681; font-weight: 600; margin-bottom: 3px; }
+.insp-value { font-size: 12px; color: #c9d1d9; margin-bottom: 10px; }
+.insp-desc { font-size: 11px; color: #8b949e; line-height: 1.55; margin-bottom: 10px; }
+.insp-empty { color: #6e7681; font-size: 11px; text-align: center; margin-top: 40px; line-height: 1.6; }
 
-.insp-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: #6e7681;
-  font-weight: 600;
-  margin-bottom: 4px;
+/* Config form */
+.cfg-field { margin-bottom: 10px; }
+.cfg-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; color: #6e7681; font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.cfg-label span { color: #c9d1d9; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cfg-input {
+  width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 5px;
+  color: #c9d1d9; font-size: 12px; padding: 5px 8px;
 }
-.insp-value { font-size: 13px; color: #c9d1d9; margin-bottom: 12px; }
-.insp-desc { font-size: 12px; color: #8b949e; line-height: 1.55; margin-bottom: 12px; }
-.insp-empty { color: #6e7681; font-size: 12px; text-align: center; margin-top: 40px; line-height: 1.6; }
+.cfg-input:focus { outline: none; border-color: #58a6ff; }
+.cfg-range { width: 100%; accent-color: #58a6ff; }
+.cfg-select {
+  width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 5px;
+  color: #c9d1d9; font-size: 11px; padding: 5px 8px;
+}
+.insp-stat { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.insp-stat-label { font-size: 10px; color: #8b949e; }
+.insp-stat-val { font-size: 11px; font-weight: 700; color: #c9d1d9; font-variant-numeric: tabular-nums; }
+.health-badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border-radius: 12px; font-size: 10px; font-weight: 700; margin-bottom: 10px;
+}
+.health-healthy { background: #1a3d2a; color: #3fb950; }
+.health-stressed { background: #3d2a00; color: #f0883e; }
+.health-overloaded { background: #3d1111; color: #f85149; }
+.health-failed { background: #3d1111; color: #f85149; border: 1px solid #f85149; }
 
-/* ── Level Overlay ──────────────────────────────────────── */
+/* ── Level HUD ──────────────────────────────────────────── */
 #level-hud {
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(22, 27, 34, 0.92);
-  border: 1px solid #30363d;
-  border-radius: 12px;
-  padding: 12px 18px;
-  min-width: 300px;
-  max-width: 380px;
-  backdrop-filter: blur(8px);
-  pointer-events: none;
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  background: rgba(22,27,34,0.93); border: 1px solid #30363d; border-radius: 12px;
+  padding: 11px 16px; min-width: 290px; max-width: 360px;
+  backdrop-filter: blur(8px); pointer-events: none; z-index: 10;
 }
-
-.lhud-badge {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #58a6ff;
-  font-weight: 700;
-  margin-bottom: 3px;
-}
-.lhud-title { font-size: 15px; font-weight: 700; color: #e6edf3; margin-bottom: 6px; }
-.lhud-desc { font-size: 11px; color: #8b949e; margin-bottom: 10px; line-height: 1.5; }
-
+.lhud-badge { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #58a6ff; font-weight: 700; margin-bottom: 2px; }
+.lhud-title { font-size: 14px; font-weight: 700; color: #e6edf3; margin-bottom: 5px; }
+.lhud-desc { font-size: 10px; color: #8b949e; margin-bottom: 8px; line-height: 1.5; }
 .goal-row {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 11px;
-  color: #8b949e;
-  margin-bottom: 4px;
-  transition: color 0.3s;
+  display: flex; align-items: center; gap: 6px; font-size: 10px;
+  color: #8b949e; margin-bottom: 3px; transition: color 0.3s;
 }
 .goal-row.done { color: #3fb950; }
-
 .goal-dot {
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  border: 1.5px solid #30363d;
-  background: #0d1117;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-  font-size: 8px;
+  width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid #30363d;
+  background: #0d1117; flex-shrink: 0; display: flex; align-items: center;
+  justify-content: center; transition: all 0.3s; font-size: 7px;
 }
 .goal-row.done .goal-dot { border-color: #3fb950; background: #238636; color: #fff; }
 
 /* ── Hint bar ───────────────────────────────────────────── */
 #hint-bar {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(33, 38, 45, 0.95);
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  padding: 8px 18px;
-  font-size: 12px;
-  color: #c9d1d9;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  white-space: nowrap;
-  backdrop-filter: blur(8px);
+  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  background: rgba(33,38,45,0.96); border: 1px solid #30363d; border-radius: 8px;
+  padding: 7px 16px; font-size: 11px; color: #c9d1d9; opacity: 0;
+  transition: opacity 0.3s; pointer-events: none; white-space: nowrap;
+  backdrop-filter: blur(8px); z-index: 10;
 }
 
 /* ── Win overlay ────────────────────────────────────────── */
 #win-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(13, 17, 23, 0.88);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(4px);
-  animation: fadeIn 0.5s ease;
+  position: absolute; inset: 0; background: rgba(13,17,23,0.88);
+  display: none; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px); z-index: 20; animation: fadeIn 0.5s ease;
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
 .win-card {
-  background: #161b22;
-  border: 1px solid #238636;
-  border-radius: 18px;
-  padding: 48px 64px;
-  text-align: center;
-  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: #161b22; border: 1px solid #238636; border-radius: 18px;
+  padding: 40px 56px; text-align: center;
+  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
 }
 @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-.win-emoji { font-size: 52px; margin-bottom: 12px; }
-.win-title { font-size: 30px; font-weight: 800; color: #3fb950; margin-bottom: 8px; }
-.win-sub { font-size: 14px; color: #8b949e; line-height: 1.6; margin-bottom: 24px; }
-
+.win-emoji { font-size: 48px; margin-bottom: 10px; }
+.win-title { font-size: 28px; font-weight: 800; color: #3fb950; margin-bottom: 6px; }
+.win-sub { font-size: 13px; color: #8b949e; line-height: 1.6; margin-bottom: 20px; }
 .win-btn {
-  background: #238636;
-  border: 1px solid #3fb950;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px 28px;
-  cursor: pointer;
-  transition: background 0.15s;
+  background: #238636; border: 1px solid #3fb950; border-radius: 8px; color: #fff;
+  font-size: 13px; font-weight: 600; padding: 9px 24px; cursor: pointer;
 }
 .win-btn:hover { background: #2ea043; }
 
-/* ── Packet pulse animation ─────────────────────────────── */
-@keyframes packetPulse {
-  0%, 100% { r: 4; opacity: 1; }
-  50% { r: 6; opacity: 0.7; }
-}
-
 /* ── Drag ghost ─────────────────────────────────────────── */
 #drag-ghost {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  border-radius: 8px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  display: none;
-  align-items: center;
-  gap: 7px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-  border: 1.5px solid;
+  position: fixed; pointer-events: none; z-index: 9999;
+  border-radius: 8px; padding: 5px 12px; font-size: 12px; font-weight: 600;
+  display: none; align-items: center; gap: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6); border: 1.5px solid;
+}
+
+/* ── Save toast ─────────────────────────────────────────── */
+#save-toast {
+  position: fixed; bottom: 20px; right: 20px;
+  background: #21262d; border: 1px solid #30363d; border-radius: 8px;
+  padding: 8px 14px; font-size: 11px; color: #8b949e; opacity: 0;
+  transition: opacity 0.3s; pointer-events: none; z-index: 100;
 }
 </style>
 </head>
 <body class="mode-select">
 
-<!-- Drag ghost -->
 <div id="drag-ghost"></div>
+<div id="save-toast">✓ Saved</div>
 
 <!-- Header -->
 <div id="header">
   <h1>⚡ Infra Simulator</h1>
   <div class="hdr-sep"></div>
-
-  <button class="hdr-btn active" id="btn-select" onclick="setMode('select')">
-    🖱️ Select <span class="kbd">S</span>
-  </button>
-  <button class="hdr-btn connect-btn" id="btn-connect" onclick="setMode('connect')">
-    🔗 Connect <span class="kbd">C</span>
-  </button>
-  <button class="hdr-btn delete-btn" id="btn-delete" onclick="setMode('delete')">
-    🗑️ Delete <span class="kbd">D</span>
-  </button>
-
+  <button class="hdr-btn active"      id="btn-select"  onclick="setMode('select')">🖱️ Select <span class="kbd">S</span></button>
+  <button class="hdr-btn connect-btn" id="btn-connect" onclick="setMode('connect')">🔗 Connect <span class="kbd">C</span></button>
+  <button class="hdr-btn delete-btn"  id="btn-delete"  onclick="setMode('delete')">🗑️ Delete <span class="kbd">D</span></button>
+  <button class="hdr-btn break-btn"   id="btn-break"   onclick="setMode('break')">☠️ Break <span class="kbd">B</span></button>
   <div class="hdr-sep"></div>
-
-  <button class="hdr-btn sim-btn" id="btn-sim" onclick="toggleSim()">
-    ▶ Simulate <span class="kbd">Space</span>
-  </button>
+  <button class="hdr-btn sim-btn" id="btn-sim" onclick="toggleSim()">▶ Simulate <span class="kbd">Space</span></button>
+  <div class="hdr-sep"></div>
+  <button class="hdr-btn" id="btn-undo" onclick="undo()" disabled>↩ Undo</button>
+  <button class="hdr-btn" id="btn-redo" onclick="redo()" disabled>↪ Redo</button>
 
   <div id="header-right">
+    <span style="font-size:10px;color:#6e7681">LEVEL</span>
+    <select id="level-sel" onchange="loadLevel(+this.value)">
+      <option value="1">1 · Hello, Infrastructure!</option>
+      <option value="2">2 · The Bottleneck</option>
+    </select>
+    <div class="hdr-sep"></div>
+    <span id="zoom-pct">100%</span>
+    <button class="hdr-btn" onclick="fitToScreen()" title="Fit all components to screen">⊡ Fit</button>
     <button class="hdr-btn" onclick="clearAll()" style="color:#8b949e">🧹 Clear</button>
   </div>
 </div>
 
-<!-- Main -->
+<!-- Body -->
 <div id="main">
 
   <!-- Palette -->
-  <div id="palette">
-    <!-- populated by JS -->
-  </div>
+  <div id="palette"></div>
 
-  <!-- Canvas -->
-  <div id="canvas-wrap">
-    <svg id="game-svg" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
-          <path d="M0,0.5 L0,5.5 L7,3 z" fill="#484f58"/>
-        </marker>
-        <marker id="arr-live" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
-          <path d="M0,0.5 L0,5.5 L7,3 z" fill="#58a6ff"/>
-        </marker>
-        <marker id="arr-hover" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
-          <path d="M0,0.5 L0,5.5 L7,3 z" fill="#8b949e"/>
-        </marker>
-        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3.5" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="glow-sm" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-      <g id="layer-conns"></g>
-      <g id="layer-comps"></g>
-      <g id="layer-pkts"></g>
-      <g id="layer-tmp"></g>
-    </svg>
+  <!-- Center: canvas + metrics -->
+  <div id="center">
+    <div id="canvas-wrap">
+      <svg id="game-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+            <path d="M0,0.5 L0,5.5 L7,3 z" fill="#484f58"/>
+          </marker>
+          <marker id="arr-live" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+            <path d="M0,0.5 L0,5.5 L7,3 z" fill="#58a6ff60"/>
+          </marker>
+          <marker id="arr-sel" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+            <path d="M0,0.5 L0,5.5 L7,3 z" fill="#58a6ff"/>
+          </marker>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-sm" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <!-- Camera group — all world-space content lives here -->
+        <g id="camera">
+          <g id="layer-conns"></g>
+          <g id="layer-comps"></g>
+          <g id="layer-pkts"></g>
+        </g>
+      </svg>
 
-    <!-- Level HUD -->
-    <div id="level-hud">
-      <div class="lhud-badge">Level 1 · Hello, Infrastructure!</div>
-      <div class="lhud-title">Build a Basic Web Stack</div>
-      <div class="lhud-desc">Connect a Client through a Load Balancer to a Web Server backed by a Database, then hit Simulate.</div>
-      <div class="goal-row" id="g-client"><div class="goal-dot">✓</div>Place a Client</div>
-      <div class="goal-row" id="g-lb"><div class="goal-dot">✓</div>Place a Load Balancer</div>
-      <div class="goal-row" id="g-server"><div class="goal-dot">✓</div>Place a Web Server</div>
-      <div class="goal-row" id="g-db"><div class="goal-dot">✓</div>Place a Database</div>
-      <div class="goal-row" id="g-path"><div class="goal-dot">✓</div>Connect them in order</div>
-      <div class="goal-row" id="g-sim"><div class="goal-dot">✓</div>Run the simulation</div>
+      <!-- Level HUD -->
+      <div id="level-hud">
+        <div class="lhud-badge" id="lhud-badge"></div>
+        <div class="lhud-title" id="lhud-title"></div>
+        <div class="lhud-desc" id="lhud-desc"></div>
+        <div id="lhud-goals"></div>
+      </div>
+
+      <div id="hint-bar"></div>
+
+      <div id="win-overlay">
+        <div class="win-card">
+          <div class="win-emoji">🎉</div>
+          <div class="win-title" id="win-title">System Online!</div>
+          <div class="win-sub" id="win-sub">Your infrastructure is handling requests successfully.</div>
+          <button class="win-btn" onclick="dismissWin()">Keep Exploring</button>
+        </div>
+      </div>
     </div>
 
-    <!-- Hint -->
-    <div id="hint-bar"></div>
-
-    <!-- Win -->
-    <div id="win-overlay">
-      <div class="win-card">
-        <div class="win-emoji">🎉</div>
-        <div class="win-title">System Online!</div>
-        <div class="win-sub">Your infrastructure is handling requests.<br>Data is flowing from client to database — level complete!</div>
-        <button class="win-btn" onclick="dismissWin()">Keep Exploring</button>
+    <!-- Metrics bar (shown during simulation) -->
+    <div id="metrics-bar">
+      <div class="m-group">
+        <div class="m-item">
+          <div class="m-label">Throughput</div>
+          <div class="m-val" id="m-tput">—</div>
+          <div class="m-unit">req / s</div>
+        </div>
+        <div class="m-sep"></div>
+        <div class="m-item">
+          <div class="m-label">Error Rate</div>
+          <div class="m-val" id="m-err">—</div>
+        </div>
+        <div class="m-sep"></div>
+        <div class="m-item">
+          <div class="m-label">p50 Latency</div>
+          <div class="m-val" id="m-p50">—</div>
+          <div class="m-unit">ms</div>
+        </div>
+        <div class="m-item">
+          <div class="m-label">p95 Latency</div>
+          <div class="m-val" id="m-p95">—</div>
+          <div class="m-unit">ms</div>
+        </div>
+        <div class="m-item">
+          <div class="m-label">p99 Latency</div>
+          <div class="m-val" id="m-p99">—</div>
+          <div class="m-unit">ms</div>
+        </div>
+        <div class="m-sep"></div>
+        <div class="m-item">
+          <div class="m-label">In Flight</div>
+          <div class="m-val" id="m-flight">—</div>
+        </div>
       </div>
+      <div id="m-explanation">Latency = sum of component base latencies along the request path</div>
     </div>
   </div>
 
   <!-- Inspector -->
   <div id="inspector">
     <div id="insp-body">
-      <div class="insp-empty">Click a component<br>to inspect it</div>
+      <div class="insp-empty">Click a component<br>to inspect &amp; configure it</div>
     </div>
   </div>
 </div>
@@ -425,178 +391,419 @@ body.mode-delete #game-svg { cursor: not-allowed; }
 
 const TYPES = {
   client: {
-    id: 'client', name: 'Client', icon: '🖥️',
-    color: '#58a6ff', bg: '#102040',
-    category: 'Traffic',
-    w: 96, h: 66,
-    desc: 'End users or external services that send requests into your system.',
-    behavior: 'SOURCE — generates request packets continuously. The starting point of all traffic.',
-    isSource: true,
-    maxIn: 0, maxOut: Infinity,
+    id:'client', name:'Client', icon:'🖥️', color:'#58a6ff', bg:'#102040',
+    category:'Traffic', w:96, h:68,
+    desc:'End users or external services sending requests into your system.',
+    behavior:'SOURCE — generates request packets. The origin of all traffic.',
+    baseLatencyMs: 0,
+    defaultMaxRPS: Infinity, isSource: true, maxIn: 0, maxOut: Infinity,
+    defaultConfig: { rps: 5, trafficPattern: 'steady' },
+    configFields: [
+      { key:'rps', label:'Requests / sec', type:'number', min:1, max:200, step:1 },
+      { key:'trafficPattern', label:'Traffic Pattern', type:'select',
+        options:[{v:'steady',l:'Steady'},{ v:'spike',l:'Bursty Spikes'}] },
+    ],
   },
   load_balancer: {
-    id: 'load_balancer', name: 'Load Balancer', icon: '⚖️',
-    color: '#79c0ff', bg: '#0e2840',
-    category: 'Traffic',
-    w: 118, h: 66,
-    desc: 'Distributes incoming requests evenly across a pool of servers.',
-    behavior: 'Round-robin: sends each packet to the next available downstream server in order.',
-    maxIn: Infinity, maxOut: Infinity,
+    id:'load_balancer', name:'Load Balancer', icon:'⚖️', color:'#79c0ff', bg:'#0e2840',
+    category:'Traffic', w:118, h:68,
+    desc:'Distributes incoming requests evenly across a pool of servers.',
+    behavior:'Round-robin: routes each packet to the next downstream server in order.',
+    baseLatencyMs: 2, defaultMaxRPS: 100000,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 100000 },
+    configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:500000, step:100 }],
   },
   api_gateway: {
-    id: 'api_gateway', name: 'API Gateway', icon: '🔗',
-    color: '#ffa657', bg: '#2a1800',
-    category: 'Traffic',
-    w: 110, h: 66,
-    desc: 'Central entry point. Handles auth, rate-limiting, and routing.',
-    behavior: 'Routes requests to appropriate services. Can drop packets under high load.',
-    maxIn: Infinity, maxOut: Infinity,
+    id:'api_gateway', name:'API Gateway', icon:'🔗', color:'#ffa657', bg:'#2a1800',
+    category:'Traffic', w:110, h:68,
+    desc:'Central entry point. Handles auth, rate-limiting, and routing.',
+    behavior:'Routes requests to downstream services. Enforces rate limits.',
+    baseLatencyMs: 3, defaultMaxRPS: 50000,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 50000 },
+    configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:200000, step:100 }],
   },
   cdn: {
-    id: 'cdn', name: 'CDN', icon: '🌍',
-    color: '#d2a8ff', bg: '#1e1040',
-    category: 'Traffic',
-    w: 88, h: 66,
-    desc: 'Content Delivery Network. Serves cached static content from edge nodes.',
-    behavior: 'High cache-hit rate: 85% of packets served instantly; 15% forwarded to origin.',
-    hitRate: 0.85,
-    maxIn: Infinity, maxOut: Infinity,
+    id:'cdn', name:'CDN', icon:'🌍', color:'#d2a8ff', bg:'#1e1040',
+    category:'Traffic', w:88, h:68,
+    desc:'Content Delivery Network. Serves cached static content from edge nodes.',
+    behavior:'Configurable hit rate. Hits serve instantly; misses forward to origin.',
+    baseLatencyMs: 2, defaultMaxRPS: 500000, hitRate: 0.85,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { hitRate: 0.85, maxRPS: 500000 },
+    configFields: [
+      { key:'hitRate', label:'Cache Hit Rate', type:'range', min:0, max:1, step:0.05 },
+    ],
   },
   web_server: {
-    id: 'web_server', name: 'Web Server', icon: '🌐',
-    color: '#3fb950', bg: '#0e2a14',
-    category: 'Compute',
-    w: 106, h: 66,
-    desc: 'Handles HTTP — serves pages, processes API calls, coordinates with backends.',
-    behavior: 'Processes request, queries cache or DB, returns response. Forwards packets downstream.',
-    maxIn: Infinity, maxOut: Infinity,
+    id:'web_server', name:'Web Server', icon:'🌐', color:'#3fb950', bg:'#0e2a14',
+    category:'Compute', w:106, h:68,
+    desc:'Handles HTTP requests, serves pages, coordinates with backends.',
+    behavior:'Processes requests and forwards data queries downstream.',
+    baseLatencyMs: 15, defaultMaxRPS: 10,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 10 },
+    configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:100000, step:1 }],
   },
   app_server: {
-    id: 'app_server', name: 'App Server', icon: '⚙️',
-    color: '#56d364', bg: '#0e2a14',
-    category: 'Compute',
-    w: 106, h: 66,
-    desc: 'Runs application business logic. Stateless — scale horizontally.',
-    behavior: 'Processes business logic. Forwards to data layer. Can publish to message queue.',
-    maxIn: Infinity, maxOut: Infinity,
+    id:'app_server', name:'App Server', icon:'⚙️', color:'#56d364', bg:'#0e2a14',
+    category:'Compute', w:106, h:68,
+    desc:'Runs application business logic. Stateless — scale horizontally.',
+    behavior:'Processes business logic and forwards to the data layer.',
+    baseLatencyMs: 15, defaultMaxRPS: 10,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 10 },
+    configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:100000, step:1 }],
   },
   cache: {
-    id: 'cache', name: 'Cache', icon: '⚡',
-    color: '#f0883e', bg: '#2a1500',
-    category: 'Data',
-    w: 92, h: 66,
-    desc: 'In-memory store (Redis/Memcached). Sub-millisecond reads.',
-    behavior: '80% cache hit: serves immediately. 20% miss: forwards to DB. Saves database load.',
-    hitRate: 0.80,
-    maxIn: Infinity, maxOut: Infinity,
+    id:'cache', name:'Cache', icon:'⚡', color:'#f0883e', bg:'#2a1500',
+    category:'Data', w:92, h:68,
+    desc:'In-memory store (Redis/Memcached). Sub-millisecond reads.',
+    behavior:'Hit rate % of requests served instantly. Misses forward to DB.',
+    baseLatencyMs: 1, defaultMaxRPS: 500, hitRate: 0.8,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { hitRate: 0.80, maxRPS: 500 },
+    configFields: [
+      { key:'hitRate', label:'Cache Hit Rate', type:'range', min:0, max:0.99, step:0.05 },
+      { key:'maxRPS', label:'Max RPS', type:'number', min:1, max:1000000, step:100 },
+    ],
   },
   sql_db: {
-    id: 'sql_db', name: 'SQL DB', icon: '🗃️',
-    color: '#f78166', bg: '#2a0e0e',
-    category: 'Data',
-    w: 96, h: 66,
-    desc: 'Relational DB (Postgres, MySQL). ACID transactions, strong consistency.',
-    behavior: 'SINK — persistently stores data. Packets terminate here. Slower writes, reliable reads.',
-    isSink: true,
-    maxIn: Infinity, maxOut: 0,
+    id:'sql_db', name:'SQL DB', icon:'🗃️', color:'#f78166', bg:'#2a0e0e',
+    category:'Data', w:96, h:68,
+    desc:'Relational DB (Postgres, MySQL). ACID transactions, strong consistency.',
+    behavior:'SINK — stores data. Packets terminate here. Models write latency.',
+    baseLatencyMs: 20, defaultMaxRPS: 50, isSink: true,
+    maxIn: Infinity, maxOut: 0, defaultConfig: { maxRPS: 50 },
+    configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:100000, step:10 }],
   },
   nosql_db: {
-    id: 'nosql_db', name: 'NoSQL DB', icon: '📊',
-    color: '#ff9492', bg: '#2a0e0e',
-    category: 'Data',
-    w: 104, h: 66,
-    desc: 'Document/key-value store (MongoDB, DynamoDB). Horizontal scale.',
-    behavior: 'SINK — high write throughput, eventual consistency. Great for flexible schemas.',
-    isSink: true,
-    maxIn: Infinity, maxOut: 0,
+    id:'nosql_db', name:'NoSQL DB', icon:'📊', color:'#ff9492', bg:'#2a0e0e',
+    category:'Data', w:104, h:68,
+    desc:'Document/key-value store (MongoDB, DynamoDB). Horizontal scale.',
+    behavior:'SINK — high write throughput, eventual consistency.',
+    baseLatencyMs: 8, defaultMaxRPS: 200, isSink: true,
+    maxIn: Infinity, maxOut: 0, defaultConfig: { maxRPS: 200 },
+    configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:500000, step:10 }],
   },
   message_queue: {
-    id: 'message_queue', name: 'Msg Queue', icon: '📨',
-    color: '#e3b341', bg: '#251a00',
-    category: 'Messaging',
-    w: 104, h: 66,
-    desc: 'Async broker (Kafka, RabbitMQ). Decouples producers from consumers.',
-    behavior: 'Buffers packets, delivers asynchronously. Absorbs traffic spikes. Fan-out supported.',
-    maxIn: Infinity, maxOut: Infinity,
+    id:'message_queue', name:'Msg Queue', icon:'📨', color:'#e3b341', bg:'#251a00',
+    category:'Messaging', w:104, h:68,
+    desc:'Async broker (Kafka, RabbitMQ). Decouples producers from consumers.',
+    behavior:'Buffers packets and delivers them asynchronously with a configurable delay.',
+    baseLatencyMs: 10, defaultMaxRPS: 10000,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 10000, deliveryDelayMs: 800 },
+    configFields: [
+      { key:'deliveryDelayMs', label:'Delivery Delay (ms)', type:'number', min:100, max:5000, step:100 },
+    ],
   },
   worker: {
-    id: 'worker', name: 'Worker', icon: '👷',
-    color: '#bc8cff', bg: '#1a0e30',
-    category: 'Messaging',
-    w: 96, h: 66,
-    desc: 'Background job processor. Consumes from a queue, does heavy work async.',
-    behavior: 'Pulls messages from queue and processes them. Writes results to DB when done.',
-    maxIn: Infinity, maxOut: Infinity,
+    id:'worker', name:'Worker', icon:'👷', color:'#bc8cff', bg:'#1a0e30',
+    category:'Messaging', w:96, h:68,
+    desc:'Background job processor. Consumes from a queue, does heavy work async.',
+    behavior:'Processes tasks slowly but reliably. Low throughput, no user-facing SLA.',
+    baseLatencyMs: 80, defaultMaxRPS: 3,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 3 },
+    configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:1000, step:1 }],
   },
 };
 
 const PALETTE_GROUPS = [
-  { label: 'Traffic',   types: ['client', 'load_balancer', 'api_gateway', 'cdn'] },
-  { label: 'Compute',   types: ['web_server', 'app_server', 'worker'] },
-  { label: 'Data',      types: ['cache', 'sql_db', 'nosql_db'] },
-  { label: 'Messaging', types: ['message_queue'] },
+  { label:'Traffic',   types:['client','load_balancer','api_gateway','cdn'] },
+  { label:'Compute',   types:['web_server','app_server','worker'] },
+  { label:'Data',      types:['cache','sql_db','nosql_db'] },
+  { label:'Messaging', types:['message_queue'] },
 ];
+
+// ═══════════════════════════════════════════════════════════
+// LEVEL DATA
+// ═══════════════════════════════════════════════════════════
+
+function hasType(s, type) {
+  return Object.values(s.comps).some(c => c.type === type);
+}
+
+function level1PathOk(s) {
+  const comps = Object.values(s.comps);
+  const dbTypes    = new Set(['sql_db','nosql_db']);
+  const serverTypes = new Set(['web_server','app_server']);
+  const lbTypes     = new Set(['load_balancer']);
+  const reach = (startId, targetSet) => {
+    const vis = new Set(), q = [startId];
+    while (q.length) {
+      const cur = q.shift();
+      if (vis.has(cur)) continue; vis.add(cur);
+      const c = s.comps[cur]; if (!c) continue;
+      if (targetSet.has(c.type)) return true;
+      s.conns.filter(k => k.from === cur).forEach(k => q.push(k.to));
+    }
+    return false;
+  };
+  for (const cl of comps.filter(c=>c.type==='client'))
+    if (reach(cl.id, lbTypes))
+      for (const lb of comps.filter(c=>c.type==='load_balancer'))
+        if (reach(lb.id, serverTypes))
+          for (const sv of comps.filter(c=>serverTypes.has(c.type)))
+            if (reach(sv.id, dbTypes)) return true;
+  return false;
+}
+
+const LEVELS = {
+  1: {
+    id:1, name:'Hello, Infrastructure!',
+    badge:'Level 1 · Foundations',
+    desc:'Connect a Client → Load Balancer → Web Server → Database, then run the simulation.',
+    locked:[], lockedConns:[],
+    winTitle:'System Online!',
+    winSub:'Your infrastructure is handling requests end-to-end. Level complete!',
+    goals:[
+      { id:'g-client', label:'Place a Client',        check:s => hasType(s,'client') },
+      { id:'g-lb',     label:'Place a Load Balancer', check:s => hasType(s,'load_balancer') },
+      { id:'g-server', label:'Place a Web Server',    check:s => hasType(s,'web_server')||hasType(s,'app_server') },
+      { id:'g-db',     label:'Place a Database',      check:s => hasType(s,'sql_db')||hasType(s,'nosql_db') },
+      { id:'g-path',   label:'Connect them in order', check:s => level1PathOk(s) },
+      { id:'g-sim',    label:'Run the simulation',    check:s => s.sim.successCount >= 3 },
+    ],
+  },
+  2: {
+    id:2, name:'The Bottleneck',
+    badge:'Level 2 · Horizontal Scaling',
+    desc:'The web server is overwhelmed at 15 RPS but can only handle 10 RPS. Add a Load Balancer and a second Web Server to distribute the load. Watch the error rate fall.',
+    locked:[
+      { id:'lc1', type:'client',     x:75,  y:240, config:{ rps:15, trafficPattern:'steady' } },
+      { id:'lc2', type:'web_server', x:300, y:240, config:{ maxRPS:10 } },
+      { id:'lc3', type:'sql_db',     x:515, y:240, config:{ maxRPS:50 } },
+    ],
+    lockedConns:[
+      { id:'lk1', from:'lc1', to:'lc2' },
+      { id:'lk2', from:'lc2', to:'lc3' },
+    ],
+    winTitle:'Bottleneck Solved!',
+    winSub:'Load is distributed. Error rate under 1%. You just learned horizontal scaling.',
+    goals:[
+      { id:'g-lb2',   label:'Add a Load Balancer',        check:s => hasType(s,'load_balancer') },
+      { id:'g-srv2',  label:'Add a 2nd Web Server',        check:s => Object.values(s.comps).filter(c=>c.type==='web_server'||c.type==='app_server').length >= 2 },
+      { id:'g-wire2', label:'Wire it up & simulate',       check:s => s.sim.on },
+      { id:'g-err2',  label:'Error rate < 1%',             check:s => s.sim.on && s.sim.metrics.rps > 5 && s.sim.metrics.errorRate < 0.01 },
+      { id:'g-tput2', label:'Throughput ≥ 14 req/s',       check:s => s.sim.on && s.sim.metrics.throughput >= 14 },
+    ],
+  },
+};
 
 // ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
 
 let S = {
-  comps: {},       // id → { id, type, x, y, rrIdx, label }
-  conns: [],       // { id, from, to }
+  comps: {}, conns: [],
   mode: 'select',
-  selId: null,
-  connFrom: null,
+  selId: null, selConnId: null, connFrom: null,
   uid: 1,
+  camera: { x: 0, y: 0, scale: 1 },
+  history: [], future: [],
+  currentLevel: 1,
   sim: {
-    on: false,
-    pkts: [],      // { id, connId, t, speed, color }
-    raf: null,
-    successCount: 0,
-    winShown: false,
+    on: false, pkts: [], raf: null,
+    successCount: 0, winShown: false,
+    recentCompletions: [], // [{t, latency}]
+    recentErrors: [],      // [{t}]
+    metrics: { rps:0, throughput:0, errorRate:0, p50:0, p95:0, p99:0, active:0 },
   },
-  winShown: false,
 };
 
 // ═══════════════════════════════════════════════════════════
-// SVG UTILS
+// HISTORY (UNDO / REDO)
+// ═══════════════════════════════════════════════════════════
+
+function cloneForHistory() {
+  // Deep clone only user-placeable state (not locked level components)
+  return JSON.parse(JSON.stringify({ comps: S.comps, conns: S.conns }));
+}
+
+function pushHistory() {
+  S.history.push(cloneForHistory());
+  if (S.history.length > 50) S.history.shift();
+  S.future = [];
+  updateUndoRedoBtns();
+}
+
+function undo() {
+  if (!S.history.length) return;
+  S.future.push(cloneForHistory());
+  const prev = S.history.pop();
+  S.comps = prev.comps; S.conns = prev.conns;
+  S.selId = null; S.selConnId = null;
+  updateUndoRedoBtns();
+  render(); saveToStorage();
+}
+
+function redo() {
+  if (!S.future.length) return;
+  S.history.push(cloneForHistory());
+  const next = S.future.pop();
+  S.comps = next.comps; S.conns = next.conns;
+  S.selId = null; S.selConnId = null;
+  updateUndoRedoBtns();
+  render(); saveToStorage();
+}
+
+function updateUndoRedoBtns() {
+  document.getElementById('btn-undo').disabled = S.history.length === 0;
+  document.getElementById('btn-redo').disabled = S.future.length === 0;
+}
+
+// ═══════════════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════════════
+
+let saveTimer = null;
+function saveToStorage() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try {
+      localStorage.setItem('infra-sim-v2', JSON.stringify({
+        version: '0.2',
+        currentLevel: S.currentLevel,
+        comps: S.comps,
+        conns: S.conns,
+        camera: S.camera,
+      }));
+      flashSaveToast();
+    } catch(e) {}
+  }, 800);
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem('infra-sim-v2');
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (data.version !== '0.2') return false;
+    S.currentLevel = data.currentLevel || 1;
+    S.comps = data.comps || {};
+    S.conns = data.conns || {};  // was bug: should be array
+    if (!Array.isArray(S.conns)) S.conns = [];
+    S.camera = data.camera || { x:0, y:0, scale:1 };
+    document.getElementById('level-sel').value = S.currentLevel;
+    renderLevelHUD();
+    updateCamera();
+    return true;
+  } catch(e) { return false; }
+}
+
+let toastTimer = null;
+function flashSaveToast() {
+  const t = document.getElementById('save-toast');
+  t.style.opacity = 1;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.style.opacity = 0, 1200);
+}
+
+// ═══════════════════════════════════════════════════════════
+// SVG / CAMERA UTILS
 // ═══════════════════════════════════════════════════════════
 
 const NS = 'http://www.w3.org/2000/svg';
 function el(tag, attrs) {
   const e = document.createElementNS(NS, tag);
-  if (attrs) for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (attrs) for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, v);
   return e;
 }
 
-function svgPt(evt) {
-  const svg = document.getElementById('game-svg');
-  const p = svg.createSVGPoint();
-  p.x = evt.clientX; p.y = evt.clientY;
-  return p.matrixTransform(svg.getScreenCTM().inverse());
+// Convert mouse event to world-space coordinates (accounts for camera)
+function worldPt(evt) {
+  const wrap = document.getElementById('canvas-wrap');
+  const r = wrap.getBoundingClientRect();
+  const sx = evt.clientX - r.left;
+  const sy = evt.clientY - r.top;
+  return { x: (sx - S.camera.x) / S.camera.scale, y: (sy - S.camera.y) / S.camera.scale };
+}
+
+function updateCamera() {
+  const g = document.getElementById('camera');
+  g.setAttribute('transform', `translate(${S.camera.x},${S.camera.y}) scale(${S.camera.scale})`);
+  document.getElementById('zoom-pct').textContent = Math.round(S.camera.scale * 100) + '%';
+}
+
+function fitToScreen() {
+  const comps = Object.values(S.comps);
+  if (!comps.length) { S.camera = {x:0,y:0,scale:1}; updateCamera(); return; }
+  const wrap = document.getElementById('canvas-wrap');
+  const W = wrap.clientWidth, H = wrap.clientHeight;
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  for (const c of comps) {
+    const t = TYPES[c.type];
+    minX=Math.min(minX,c.x); minY=Math.min(minY,c.y);
+    maxX=Math.max(maxX,c.x+t.w); maxY=Math.max(maxY,c.y+t.h);
+  }
+  const pad=60, bw=maxX-minX+pad*2, bh=maxY-minY+pad*2;
+  const sc=Math.max(0.2,Math.min(2,Math.min(W/bw,H/bh)));
+  S.camera.scale=sc;
+  S.camera.x=(W-bw*sc)/2+pad*sc-minX*sc;
+  S.camera.y=(H-bh*sc)/2+pad*sc-minY*sc;
+  updateCamera();
 }
 
 function connPath(conn) {
-  const a = S.comps[conn.from];
-  const b = S.comps[conn.to];
-  if (!a || !b) return null;
-  const ta = TYPES[a.type], tb = TYPES[b.type];
-  const x1 = a.x + ta.w, y1 = a.y + ta.h / 2;
-  const x2 = b.x,       y2 = b.y + tb.h / 2;
-  const dx = Math.max(Math.abs(x2 - x1) * 0.45, 55);
-  return { x1, y1, x2, y2, c1x: x1+dx, c1y: y1, c2x: x2-dx, c2y: y2 };
+  const a=S.comps[conn.from], b=S.comps[conn.to];
+  if(!a||!b) return null;
+  const ta=TYPES[a.type],tb=TYPES[b.type];
+  const x1=a.x+ta.w, y1=a.y+ta.h/2, x2=b.x, y2=b.y+tb.h/2;
+  const dx=Math.max(Math.abs(x2-x1)*0.45,55);
+  return { x1,y1,x2,y2, c1x:x1+dx,c1y:y1, c2x:x2-dx,c2y:y2 };
 }
 
-function bezier(t, p) {
-  const u = 1-t;
-  return {
-    x: u*u*u*p.x1 + 3*u*u*t*p.c1x + 3*u*t*t*p.c2x + t*t*t*p.x2,
-    y: u*u*u*p.y1 + 3*u*u*t*p.c1y + 3*u*t*t*p.c2y + t*t*t*p.y2,
-  };
+function bezier(t,p) {
+  const u=1-t;
+  return { x:u*u*u*p.x1+3*u*u*t*p.c1x+3*u*t*t*p.c2x+t*t*t*p.x2,
+           y:u*u*u*p.y1+3*u*u*t*p.c1y+3*u*t*t*p.c2y+t*t*t*p.y2 };
+}
+
+function getPacketSpeed(destTypeId) {
+  const lat = TYPES[destTypeId]?.baseLatencyMs ?? 15;
+  if (lat === 0) return 0.075;
+  return Math.max(0.007, Math.min(0.075, 0.025 * (15 / lat)));
 }
 
 // ═══════════════════════════════════════════════════════════
-// BUILD PALETTE
+// CAMERA EVENTS (PAN + ZOOM)
+// ═══════════════════════════════════════════════════════════
+
+let isPanning=false, panStartX=0, panStartY=0, camStartX=0, camStartY=0;
+
+const canvasWrap = document.getElementById('canvas-wrap');
+
+canvasWrap.addEventListener('wheel', e => {
+  e.preventDefault();
+  const r = canvasWrap.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  const factor = e.deltaY > 0 ? 0.88 : 1.14;
+  const ns = Math.max(0.2, Math.min(5, S.camera.scale * factor));
+  S.camera.x = mx - (mx - S.camera.x) * (ns / S.camera.scale);
+  S.camera.y = my - (my - S.camera.y) * (ns / S.camera.scale);
+  S.camera.scale = ns;
+  updateCamera();
+}, { passive: false });
+
+document.getElementById('game-svg').addEventListener('mousedown', e => {
+  if (e.button === 1 || (e.button === 0 && e.altKey)) {
+    e.preventDefault();
+    isPanning = true;
+    panStartX = e.clientX; panStartY = e.clientY;
+    camStartX = S.camera.x; camStartY = S.camera.y;
+    document.body.classList.add('mode-panning');
+  }
+});
+document.addEventListener('mousemove', e => {
+  if (!isPanning) return;
+  S.camera.x = camStartX + (e.clientX - panStartX);
+  S.camera.y = camStartY + (e.clientY - panStartY);
+  updateCamera();
+});
+document.addEventListener('mouseup', e => {
+  if (e.button === 1 || isPanning) {
+    isPanning = false;
+    document.body.classList.remove('mode-panning');
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// PALETTE
 // ═══════════════════════════════════════════════════════════
 
 function buildPalette() {
@@ -612,23 +819,17 @@ function buildPalette() {
       item.className = 'pal-item';
       item.dataset.type = tid;
       item.innerHTML = `
-        <div class="pal-icon" style="background:${t.bg};border-color:${t.color}30">
-          <span>${t.icon}</span>
-        </div>
-        <div class="pal-text">
+        <div class="pal-icon" style="background:${t.bg};border:1px solid ${t.color}30">${t.icon}</div>
+        <div>
           <div class="pal-name" style="color:${t.color}">${t.name}</div>
           <div class="pal-hint">${t.desc.split('.')[0]}</div>
         </div>`;
-      item.addEventListener('mousedown', e => startPalDrag(e, tid));
+      item.addEventListener('mousedown', ev => startPalDrag(ev, tid));
       sec.appendChild(item);
     }
     pal.appendChild(sec);
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-// PALETTE DRAG
-// ═══════════════════════════════════════════════════════════
 
 let palDragType = null;
 const ghost = document.getElementById('drag-ghost');
@@ -638,42 +839,45 @@ function startPalDrag(e, tid) {
   palDragType = tid;
   const t = TYPES[tid];
   ghost.innerHTML = `${t.icon} ${t.name}`;
-  ghost.style.background = t.bg;
-  ghost.style.borderColor = t.color;
-  ghost.style.color = t.color;
-  ghost.style.display = 'flex';
+  ghost.style.cssText += `;background:${t.bg};border-color:${t.color};color:${t.color};display:flex`;
   moveGhost(e);
   document.addEventListener('mousemove', moveGhost);
   document.addEventListener('mouseup', endPalDrag);
 }
-
 function moveGhost(e) {
-  ghost.style.left = (e.clientX + 14) + 'px';
-  ghost.style.top  = (e.clientY - 16) + 'px';
+  ghost.style.left = (e.clientX+12)+'px';
+  ghost.style.top  = (e.clientY-14)+'px';
 }
-
 function endPalDrag(e) {
   document.removeEventListener('mousemove', moveGhost);
   document.removeEventListener('mouseup', endPalDrag);
   ghost.style.display = 'none';
   if (!palDragType) return;
-
-  const wrap = document.getElementById('canvas-wrap');
-  const r = wrap.getBoundingClientRect();
-  if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
-    const pt = svgPt(e);
+  const r = canvasWrap.getBoundingClientRect();
+  if (e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom) {
+    const pt = worldPt(e);
     const t = TYPES[palDragType];
-    placeComp(palDragType, pt.x - t.w/2, pt.y - t.h/2);
+    pushHistory();
+    placeComp(palDragType, pt.x-t.w/2, pt.y-t.h/2);
   }
   palDragType = null;
 }
 
-function placeComp(type, x, y) {
-  const id = 'c' + S.uid++;
-  S.comps[id] = { id, type, x, y, rrIdx: 0 };
+function placeComp(type, x, y, overrideId, overrideConfig, locked) {
+  const t = TYPES[type];
+  const id = overrideId || ('c' + S.uid++);
+  S.comps[id] = {
+    id, type, x, y, locked: !!locked,
+    rrIdx: 0, healthState: 'healthy',
+    currentRPS: 0, arrivalTimes: [], _bucket: 0,
+    config: { ...(t.defaultConfig||{}), ...(overrideConfig||{}) },
+  };
   S.selId = id;
   render();
-  hint(`Placed ${TYPES[type].name} — use Connect mode to wire it up`);
+  if (!locked) {
+    hint(`Placed ${t.name} — switch to Connect mode (C) to wire it up`);
+    saveToStorage();
+  }
   return id;
 }
 
@@ -685,7 +889,6 @@ function render() {
   renderConns();
   renderComps();
   renderInspector();
-  checkGoals();
 }
 
 function renderConns() {
@@ -695,143 +898,155 @@ function renderConns() {
     const p = connPath(conn);
     if (!p) continue;
     const d = `M${p.x1},${p.y1} C${p.c1x},${p.c1y} ${p.c2x},${p.c2y} ${p.x2},${p.y2}`;
-    const path = el('path', {
-      d, fill: 'none',
-      stroke: S.sim.on ? '#58a6ff' : '#30363d',
-      'stroke-width': S.sim.on ? 1.8 : 1.5,
-      'stroke-dasharray': S.sim.on ? 'none' : 'none',
-      'marker-end': S.sim.on ? 'url(#arr-live)' : 'url(#arr)',
-      opacity: S.sim.on ? 0.65 : 0.7,
+    const isSel = conn.id === S.selConnId;
+    const isLive = S.sim.on;
+
+    // Visible path
+    const vp = el('path', {
+      d, fill:'none',
+      stroke: isSel ? '#58a6ff' : isLive ? '#58a6ff' : '#30363d',
+      'stroke-width': isSel ? 2.5 : 1.5,
+      'marker-end': isSel ? 'url(#arr-sel)' : isLive ? 'url(#arr-live)' : 'url(#arr)',
+      opacity: isSel ? 1 : isLive ? 0.5 : 0.7,
+      'pointer-events': 'none',
     });
-    layer.appendChild(path);
+    layer.appendChild(vp);
+
+    // Wide invisible hit area
+    const hp = el('path', {
+      d, fill:'none', stroke:'transparent', 'stroke-width':16, cursor:'pointer',
+    });
+    hp.addEventListener('mouseenter', () => vp.setAttribute('stroke','#8b949e'));
+    hp.addEventListener('mouseleave', () => {
+      vp.setAttribute('stroke', isSel ? '#58a6ff' : isLive ? '#58a6ff' : '#30363d');
+    });
+    hp.addEventListener('click', ev => { ev.stopPropagation(); onConnClick(conn.id); });
+    layer.appendChild(hp);
   }
 }
 
 function renderComps() {
   const layer = document.getElementById('layer-comps');
   layer.innerHTML = '';
-
   for (const comp of Object.values(S.comps)) {
     const t = TYPES[comp.type];
-    const isSel = comp.id === S.selId;
+    const isSel  = comp.id === S.selId;
     const isFrom = comp.id === S.connFrom;
+    const hs = comp.healthState || 'healthy';
+    const maxRPS = comp.config?.maxRPS ?? t.defaultMaxRPS ?? 9999;
+    const ratio  = t.isSource ? 0 : Math.min(1.5, (comp.currentRPS||0) / maxRPS);
 
-    const g = el('g', { transform: `translate(${comp.x},${comp.y})`, style: 'cursor:pointer' });
+    const g = el('g', {
+      transform:`translate(${comp.x},${comp.y})`,
+      style:'cursor:pointer',
+    });
 
-    // Selection ring
+    // Selection / connect ring
     if (isSel || isFrom) {
-      g.appendChild(el('rect', {
-        x: -5, y: -5, width: t.w+10, height: t.h+10, rx: 13,
-        fill: 'none',
+      g.appendChild(el('rect',{
+        x:-5,y:-5,width:t.w+10,height:t.h+10,rx:13,
+        fill:'none',
         stroke: isFrom ? '#ffa657' : '#58a6ff',
-        'stroke-width': 2,
-        opacity: 0.6,
-        filter: 'url(#glow)',
+        'stroke-width':2, opacity:0.6, filter:'url(#glow)',
       }));
     }
 
+    // Card border color based on health
+    const cardStroke =
+      hs==='failed'     ? '#f85149' :
+      hs==='overloaded' ? '#f85149' :
+      hs==='stressed'   ? '#f0883e' :
+      isSel   ? '#58a6ff' :
+      isFrom  ? '#ffa657' : t.color+'55';
+
     // Card body
-    g.appendChild(el('rect', {
-      x: 0, y: 0, width: t.w, height: t.h, rx: 9,
-      fill: t.bg,
-      stroke: isSel ? '#58a6ff' : (isFrom ? '#ffa657' : t.color + '55'),
-      'stroke-width': isSel || isFrom ? 2 : 1,
+    g.appendChild(el('rect',{
+      x:0,y:0,width:t.w,height:t.h,rx:9,
+      fill:t.bg, stroke:cardStroke,
+      'stroke-width':hs==='healthy'&&!isSel&&!isFrom ? 1 : 2,
     }));
 
-    // Accent top strip
-    g.appendChild(el('rect', {
-      x: 0, y: 0, width: t.w, height: 3, rx: 9,
-      fill: t.color, opacity: 0.7,
-    }));
-    // top strip square corners at bottom
-    g.appendChild(el('rect', {
-      x: 0, y: 1.5, width: t.w, height: 1.5,
-      fill: t.color, opacity: 0.7,
-    }));
+    // Top accent strip
+    g.appendChild(el('rect',{x:0,y:0,width:t.w,height:3,rx:9,fill:t.color,opacity:0.7}));
+    g.appendChild(el('rect',{x:0,y:1.5,width:t.w,height:1.5,fill:t.color,opacity:0.7}));
 
     // Icon
-    const icon = el('text', {
-      x: t.w/2, y: 30,
-      'text-anchor': 'middle', 'dominant-baseline': 'middle',
-      'font-size': 18, style: 'user-select:none',
+    const icon = el('text',{
+      x:t.w/2,y:t.isSource||t.isSink?28:30,
+      'text-anchor':'middle','dominant-baseline':'middle','font-size':17,style:'user-select:none',
     });
     icon.textContent = t.icon;
     g.appendChild(icon);
 
     // Name
-    const name = el('text', {
-      x: t.w/2, y: 51,
-      'text-anchor': 'middle', 'dominant-baseline': 'middle',
-      'font-size': 10.5, fill: t.color, 'font-weight': '700',
-      'font-family': "'Segoe UI',system-ui,sans-serif",
-      style: 'user-select:none',
+    const name = el('text',{
+      x:t.w/2,y:49,
+      'text-anchor':'middle','dominant-baseline':'middle',
+      'font-size':10,'font-weight':'700',fill:t.color,
+      'font-family':"'Segoe UI',system-ui,sans-serif",style:'user-select:none',
     });
     name.textContent = t.name;
     g.appendChild(name);
 
-    // Source/Sink labels
-    if (t.isSource) {
-      const lbl = el('text', {
-        x: t.w/2, y: 62,
-        'text-anchor': 'middle', 'dominant-baseline': 'middle',
-        'font-size': 8, fill: t.color + '80',
-        'font-family': "'Segoe UI',system-ui,sans-serif",
-        style: 'user-select:none',
+    // SOURCE / SINK / LOCKED label
+    const sublabel = t.isSource ? 'SOURCE' : t.isSink ? 'SINK' : comp.locked ? '🔒' : '';
+    if (sublabel) {
+      const lbl = el('text',{
+        x:t.w/2,y:61,'text-anchor':'middle','dominant-baseline':'middle',
+        'font-size':7,fill:t.color+'70',
+        'font-family':"'Segoe UI',system-ui,sans-serif",style:'user-select:none',
       });
-      lbl.textContent = 'SOURCE';
-      g.appendChild(lbl);
-    }
-    if (t.isSink) {
-      const lbl = el('text', {
-        x: t.w/2, y: 62,
-        'text-anchor': 'middle', 'dominant-baseline': 'middle',
-        'font-size': 8, fill: t.color + '80',
-        'font-family': "'Segoe UI',system-ui,sans-serif",
-        style: 'user-select:none',
-      });
-      lbl.textContent = 'SINK';
+      lbl.textContent = sublabel;
       g.appendChild(lbl);
     }
 
-    // Input port (left)
-    if (t.maxIn > 0) {
-      g.appendChild(el('circle', {
-        cx: 0, cy: t.h/2, r: 5,
-        fill: '#0d1117', stroke: t.color + '80', 'stroke-width': 1.5,
-      }));
-    }
-    // Output port (right)
-    if (t.maxOut > 0) {
-      g.appendChild(el('circle', {
-        cx: t.w, cy: t.h/2, r: 5,
-        fill: '#0d1117', stroke: t.color + '80', 'stroke-width': 1.5,
-      }));
+    // Load bar (not shown for source or when max is infinite)
+    if (!t.isSource && maxRPS < 100000) {
+      const bx=5, by=t.h-7, bw=t.w-10;
+      g.appendChild(el('rect',{x:bx,y:by,width:bw,height:4,rx:2,fill:'#0d1117'}));
+      const fw = bw * Math.min(1, ratio);
+      if (fw > 0) {
+        const bc = ratio>1 ? '#f85149' : ratio>0.7 ? '#f0883e' : '#3fb950';
+        g.appendChild(el('rect',{x:bx,y:by,width:fw,height:4,rx:2,fill:bc}));
+      }
     }
 
-    // Invisible hit area
-    const hit = el('rect', { x: 0, y: 0, width: t.w, height: t.h, rx: 9, fill: 'transparent' });
+    // Ports
+    if (t.maxIn>0)  g.appendChild(el('circle',{cx:0,   cy:t.h/2,r:5,fill:'#0d1117',stroke:t.color+'70','stroke-width':1.5}));
+    if (t.maxOut>0) g.appendChild(el('circle',{cx:t.w, cy:t.h/2,r:5,fill:'#0d1117',stroke:t.color+'70','stroke-width':1.5}));
+
+    // Failed overlay
+    if (hs === 'failed') {
+      g.appendChild(el('rect',{x:0,y:0,width:t.w,height:t.h,rx:9,fill:'#f8514920'}));
+      g.appendChild(el('line',{x1:12,y1:12,x2:t.w-12,y2:t.h-12,stroke:'#f85149','stroke-width':2.5,'stroke-linecap':'round'}));
+      g.appendChild(el('line',{x1:t.w-12,y1:12,x2:12,y2:t.h-12,stroke:'#f85149','stroke-width':2.5,'stroke-linecap':'round'}));
+    }
+
+    // Invisible hit area (on top)
+    const hit = el('rect',{x:0,y:0,width:t.w,height:t.h,rx:9,fill:'transparent'});
     g.appendChild(hit);
 
-    g.addEventListener('mousedown', e => onCompDown(e, comp.id));
-    g.addEventListener('click', e => onCompClick(e, comp.id));
-
+    g.addEventListener('mousedown', ev => onCompDown(ev, comp.id));
+    g.addEventListener('click',     ev => onCompClick(ev, comp.id));
     layer.appendChild(g);
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-// COMPONENT DRAG (move)
+// COMPONENT INTERACTION
 // ═══════════════════════════════════════════════════════════
 
-let dragging = null, dox = 0, doy = 0;
+let dragging=null, dox=0, doy=0, hasMoved=false;
 
 function onCompDown(e, id) {
-  if (S.mode === 'connect' || S.mode === 'delete') return;
+  if (S.mode==='connect'||S.mode==='delete'||S.mode==='break') return;
   if (S.sim.on) return;
+  if (S.comps[id]?.locked) return;
   e.stopPropagation();
-  S.selId = id;
-  const pt = svgPt(e);
+  hasMoved = false;
+  S.selId = id; S.selConnId = null;
   dragging = id;
+  const pt = worldPt(e);
   dox = pt.x - S.comps[id].x;
   doy = pt.y - S.comps[id].y;
   render();
@@ -839,79 +1054,89 @@ function onCompDown(e, id) {
 
 document.getElementById('game-svg').addEventListener('mousemove', e => {
   if (!dragging) return;
-  const pt = svgPt(e);
+  if (!hasMoved) { hasMoved = true; pushHistory(); }
+  const pt = worldPt(e);
   S.comps[dragging].x = pt.x - dox;
   S.comps[dragging].y = pt.y - doy;
   render();
 });
 
-document.getElementById('game-svg').addEventListener('mouseup', () => { dragging = null; });
+document.getElementById('game-svg').addEventListener('mouseup', () => {
+  if (dragging && hasMoved) saveToStorage();
+  dragging = null;
+});
 
 document.getElementById('game-svg').addEventListener('click', e => {
-  if (e.target === document.getElementById('game-svg') || e.target.closest('g') === null) {
-    if (S.mode === 'connect' && S.connFrom) {
-      S.connFrom = null;
-      render();
-    }
-    S.selId = null;
-    render();
+  if (isPanning) return;
+  const onGroup = e.target.closest('g[data-no-desel]');
+  if (!onGroup) {
+    if (S.mode==='connect' && S.connFrom) { S.connFrom=null; render(); }
+    S.selId=null; S.selConnId=null; render();
   }
 });
 
-// ═══════════════════════════════════════════════════════════
-// CONNECT / DELETE CLICK
-// ═══════════════════════════════════════════════════════════
-
 function onCompClick(e, id) {
   e.stopPropagation();
-
-  if (S.mode === 'delete') {
-    deleteComp(id);
+  if (S.mode==='delete') { deleteComp(id); return; }
+  if (S.mode==='break') {
+    const comp = S.comps[id];
+    if (!comp) return;
+    comp.healthState = comp.healthState==='failed' ? 'healthy' : 'failed';
+    render(); renderInspector();
+    hint(comp.healthState==='failed' ? `☠️ ${TYPES[comp.type].name} is now FAILED — watch the error rate` : `✓ ${TYPES[comp.type].name} recovered`);
     return;
   }
-
-  if (S.mode === 'connect') {
+  if (S.mode==='connect') {
     if (!S.connFrom) {
-      S.connFrom = id;
-      render();
-      hint('Now click the target component to draw a connection →');
-    } else if (S.connFrom === id) {
-      S.connFrom = null;
-      render();
+      S.connFrom=id; render();
+      hint('Click the destination component to create a connection →');
+    } else if (S.connFrom===id) {
+      S.connFrom=null; render();
     } else {
-      const exists = S.conns.find(c => c.from === S.connFrom && c.to === id);
+      const exists = S.conns.find(c=>c.from===S.connFrom&&c.to===id);
       if (!exists) {
-        S.conns.push({ id: 'k' + S.uid++, from: S.connFrom, to: id });
-        hint('Connection created! Add more or hit Simulate.');
-      } else {
-        hint('Already connected.');
-      }
-      S.connFrom = null;
-      render();
+        pushHistory();
+        S.conns.push({ id:'k'+S.uid++, from:S.connFrom, to:id });
+        hint('Connection created!');
+        saveToStorage();
+      } else { hint('Already connected.'); }
+      S.connFrom=null; render();
     }
     return;
   }
-
-  // select mode
-  S.selId = id;
-  render();
+  S.selId=id; S.selConnId=null; render();
 }
 
 // ═══════════════════════════════════════════════════════════
-// DELETE
+// CONNECTION INTERACTION
+// ═══════════════════════════════════════════════════════════
+
+function onConnClick(id) {
+  if (S.mode==='delete') { pushHistory(); S.conns=S.conns.filter(c=>c.id!==id); render(); saveToStorage(); return; }
+  S.selConnId = S.selConnId===id ? null : id;
+  S.selId = null;
+  render();
+}
+
+function deleteSelectedConn() {
+  if (!S.selConnId) return;
+  pushHistory();
+  S.conns = S.conns.filter(c=>c.id!==S.selConnId);
+  S.selConnId = null;
+  render(); saveToStorage();
+}
+
+// ═══════════════════════════════════════════════════════════
+// DELETE COMPONENT
 // ═══════════════════════════════════════════════════════════
 
 function deleteComp(id) {
+  if (S.comps[id]?.locked) { hint('Locked components cannot be deleted in this level.'); return; }
+  pushHistory();
   delete S.comps[id];
-  S.conns = S.conns.filter(c => c.from !== id && c.to !== id);
-  if (S.selId === id) S.selId = null;
-  render();
-  hint('Deleted.');
-}
-
-function deleteConn(id) {
-  S.conns = S.conns.filter(c => c.id !== id);
-  render();
+  S.conns = S.conns.filter(c=>c.from!==id&&c.to!==id);
+  if (S.selId===id) S.selId=null;
+  render(); saveToStorage();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -919,15 +1144,14 @@ function deleteConn(id) {
 // ═══════════════════════════════════════════════════════════
 
 function setMode(m) {
-  if (S.sim.on && m !== 'select') stopSim();
-  S.mode = m;
-  S.connFrom = null;
-  document.body.className = `mode-${m}`;
-  document.getElementById('btn-select').classList.toggle('active', m === 'select');
-  document.getElementById('btn-connect').classList.toggle('active', m === 'connect');
-  document.getElementById('btn-delete').classList.toggle('active', m === 'delete');
-  if (m === 'connect') hint('Click a source component, then click a destination to connect them.');
-  if (m === 'delete') hint('Click any component to delete it.');
+  if (S.sim.on && m!=='select') stopSim();
+  S.mode=m; S.connFrom=null;
+  document.body.className=`mode-${m}`;
+  ['select','connect','delete','break'].forEach(n=>
+    document.getElementById('btn-'+n).classList.toggle('active',n===m));
+  if (m==='connect') hint('Click a source, then click the destination to connect.');
+  if (m==='delete')  hint('Click any component or connection to delete it.');
+  if (m==='break')   hint('☠️ Click a component to force-fail or recover it. Watch what happens to the metrics.');
   render();
 }
 
@@ -937,328 +1161,521 @@ function setMode(m) {
 
 function renderInspector() {
   const body = document.getElementById('insp-body');
-  if (!S.selId || !S.comps[S.selId]) {
-    body.innerHTML = '<div class="insp-empty">Click a component<br>to inspect it</div>';
+
+  // Connection selected
+  if (S.selConnId && !S.selId) {
+    const conn = S.conns.find(c=>c.id===S.selConnId);
+    if (!conn) { body.innerHTML='<div class="insp-empty">Select a component</div>'; return; }
+    const fc=S.comps[conn.from], tc=S.comps[conn.to];
+    const ft=TYPES[fc?.type], tt=TYPES[tc?.type];
+    body.innerHTML=`
+      <div class="insp-label" style="margin-bottom:10px">Connection</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:10px;background:#0d1117;border-radius:8px">
+        <span style="font-size:20px">${ft?.icon||'?'}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;color:${ft?.color||'#ccc'};font-weight:700">${ft?.name||'?'}</div>
+        </div>
+        <span style="color:#58a6ff;font-size:14px">→</span>
+        <div style="flex:1;min-width:0;text-align:right">
+          <div style="font-size:11px;color:${tt?.color||'#ccc'};font-weight:700">${tt?.name||'?'}</div>
+        </div>
+        <span style="font-size:20px">${tt?.icon||'?'}</span>
+      </div>
+      ${conn.locked ? '<div class="insp-desc">This connection is part of the level setup and cannot be deleted.</div>' : `
+      <button onclick="deleteSelectedConn()" style="
+        width:100%;background:#21262d;border:1px solid #f8514930;border-radius:6px;
+        color:#f85149;font-size:11px;font-weight:600;padding:7px;cursor:pointer">
+        🗑️ Delete Connection
+      </button>`}
+    `;
     return;
   }
-  const comp = S.comps[S.selId];
-  const t = TYPES[comp.type];
-  const inC = S.conns.filter(c => c.to === comp.id).length;
-  const outC = S.conns.filter(c => c.from === comp.id).length;
+
+  if (!S.selId||!S.comps[S.selId]) {
+    body.innerHTML='<div class="insp-empty">Click a component<br>to inspect &amp; configure it</div>';
+    return;
+  }
+
+  const comp=S.comps[S.selId], t=TYPES[comp.type];
+  const hs=comp.healthState||'healthy';
+  const maxRPS=comp.config?.maxRPS ?? t.defaultMaxRPS ?? 9999;
+  const inC=S.conns.filter(c=>c.to===comp.id).length;
+  const outC=S.conns.filter(c=>c.from===comp.id).length;
+
+  const healthHTML = `<div class="health-badge health-${hs}">
+    ${ hs==='failed'?'☠️ FAILED':hs==='overloaded'?'🔴 OVERLOADED':hs==='stressed'?'🟡 STRESSED':'🟢 HEALTHY' }
+  </div>`;
+
+  const statsHTML = S.sim.on && !t.isSource ? `
+    <div class="insp-label">Live Load</div>
+    <div class="insp-stat"><span class="insp-stat-label">Current RPS</span><span class="insp-stat-val">${(comp.currentRPS||0).toFixed(1)}</span></div>
+    <div class="insp-stat"><span class="insp-stat-label">Max RPS</span><span class="insp-stat-val">${maxRPS >= 100000 ? '∞' : maxRPS}</span></div>
+    <div class="insp-stat"><span class="insp-stat-label">Load</span><span class="insp-stat-val" style="color:${hs==='overloaded'?'#f85149':hs==='stressed'?'#f0883e':'#3fb950'}">${maxRPS>=100000?'—':Math.round(Math.min(150,(comp.currentRPS||0)/maxRPS*100))+'%'}</span></div>
+    <hr style="border:none;border-top:1px solid #21262d;margin:8px 0">
+  ` : '';
+
+  // Build config form
+  const fields = t.configFields || [];
+  const cfgHTML = fields.map(f => {
+    const val = comp.config?.[f.key] ?? f.default ?? 0;
+    if (f.type==='number') return `
+      <div class="cfg-field">
+        <div class="cfg-label">${f.label} <span>${val}</span></div>
+        <input class="cfg-input" type="number" min="${f.min}" max="${f.max}" step="${f.step||1}" value="${val}"
+          ${comp.locked && f.key!=='rps'?'disabled':''}
+          onchange="onCfgChange('${comp.id}','${f.key}',+this.value);this.previousElementSibling.querySelector('span').textContent=this.value">
+      </div>`;
+    if (f.type==='range') return `
+      <div class="cfg-field">
+        <div class="cfg-label">${f.label} <span>${f.key.includes('Rate')||f.key==='hitRate'?Math.round(val*100)+'%':val}</span></div>
+        <input class="cfg-range" type="range" min="${f.min}" max="${f.max}" step="${f.step||0.05}" value="${val}"
+          oninput="onCfgChange('${comp.id}','${f.key}',+this.value);this.previousElementSibling.querySelector('span').textContent=(${f.key.includes('Rate')||f.key==='hitRate'}?Math.round(+this.value*100)+'%':+this.value)">
+      </div>`;
+    if (f.type==='select') return `
+      <div class="cfg-field">
+        <div class="cfg-label">${f.label}</div>
+        <select class="cfg-select" onchange="onCfgChange('${comp.id}','${f.key}',this.value)">
+          ${(f.options||[]).map(o=>`<option value="${o.v}" ${val===o.v?'selected':''}>${o.l}</option>`).join('')}
+        </select>
+      </div>`;
+    return '';
+  }).join('');
 
   body.innerHTML = `
-    <div style="text-align:center;margin-bottom:14px">
-      <div style="font-size:34px;margin-bottom:6px">${t.icon}</div>
-      <div style="font-size:15px;font-weight:700;color:${t.color}">${t.name}</div>
+    <div style="text-align:center;margin-bottom:12px">
+      <div style="font-size:30px;margin-bottom:5px">${t.icon}</div>
+      <div style="font-size:14px;font-weight:700;color:${t.color}">${t.name}</div>
+      ${comp.locked?'<div style="font-size:9px;color:#6e7681;margin-top:3px">🔒 LEVEL COMPONENT</div>':''}
     </div>
+    ${healthHTML}
+    ${statsHTML}
     <div class="insp-label">Description</div>
     <div class="insp-desc">${t.desc}</div>
-    <div class="insp-label">Simulation Behavior</div>
-    <div class="insp-desc" style="color:#e3b34180;border-left:2px solid #e3b34140;padding-left:8px">${t.behavior}</div>
+    <div class="insp-label">Sim Behavior</div>
+    <div class="insp-desc" style="color:#e3b34190;border-left:2px solid #e3b34140;padding-left:8px">${t.behavior}</div>
     <div class="insp-label">Connections</div>
-    <div class="insp-value">↙ ${inC} in &nbsp;·&nbsp; ${outC} out ↗</div>
-    <hr style="border:none;border-top:1px solid #21262d;margin:12px 0">
+    <div class="insp-value">↙ ${inC} in · ${outC} out ↗</div>
+    ${cfgHTML ? `<hr style="border:none;border-top:1px solid #21262d;margin:8px 0"><div class="insp-label">Configuration</div>${cfgHTML}` : ''}
+    ${comp.locked ? '' : `
+    <hr style="border:none;border-top:1px solid #21262d;margin:10px 0">
     <button onclick="deleteComp('${comp.id}')" style="
-      width:100%;background:#21262d;border:1px solid #f8514930;
-      border-radius:6px;color:#f85149;font-size:12px;font-weight:600;
-      padding:7px;cursor:pointer;transition:background 0.15s
-    " onmouseover="this.style.background='#3d1111'" onmouseout="this.style.background='#21262d'">
+      width:100%;background:#21262d;border:1px solid #f8514930;border-radius:6px;
+      color:#f85149;font-size:11px;font-weight:600;padding:6px;cursor:pointer">
       🗑️ Delete Component
-    </button>
+    </button>`}
   `;
 }
 
+function onCfgChange(compId, key, value) {
+  const comp = S.comps[compId];
+  if (!comp) return;
+  if (!comp.config) comp.config = {};
+  comp.config[key] = value;
+  // Don't push to history for config changes (too frequent for range sliders)
+  saveToStorage();
+}
+
 // ═══════════════════════════════════════════════════════════
-// CLEAR
+// CLEAR / LEVEL LOADING
 // ═══════════════════════════════════════════════════════════
 
 function clearAll() {
+  if (!confirm('Clear the canvas? This resets the level.')) return;
   stopSim();
-  S.comps = {}; S.conns = []; S.selId = null; S.connFrom = null;
-  S.sim.successCount = 0; S.sim.winShown = false; S.winShown = false;
+  loadLevel(S.currentLevel);
+}
+
+function loadLevel(id) {
+  stopSim();
+  S.currentLevel = id;
+  const lvl = LEVELS[id];
+  S.comps = {}; S.conns = [];
+  S.selId = null; S.selConnId = null; S.connFrom = null;
+  S.sim.successCount = 0; S.sim.winShown = false;
+  S.sim.recentCompletions = []; S.sim.recentErrors = [];
+  S.history = []; S.future = [];
+  updateUndoRedoBtns();
+
+  // Place locked components
+  for (const lc of (lvl.locked||[])) {
+    placeComp(lc.type, lc.x, lc.y, lc.id, lc.config, true);
+  }
+  // Place locked connections
+  for (const lk of (lvl.lockedConns||[])) {
+    S.conns.push({ id:lk.id, from:lk.from, to:lk.to, locked:true });
+  }
+
+  document.getElementById('level-sel').value = id;
   document.getElementById('win-overlay').style.display = 'none';
+  renderLevelHUD();
   render();
-  hint('Canvas cleared.');
+  saveToStorage();
+  hint(lvl.desc.split('.')[0] + '.');
+}
+
+function renderLevelHUD() {
+  const lvl = LEVELS[S.currentLevel];
+  if (!lvl) return;
+  document.getElementById('lhud-badge').textContent = lvl.badge;
+  document.getElementById('lhud-title').textContent = lvl.name;
+  document.getElementById('lhud-desc').textContent  = lvl.desc;
+  const goalsDiv = document.getElementById('lhud-goals');
+  goalsDiv.innerHTML = '';
+  for (const goal of lvl.goals) {
+    const row = document.createElement('div');
+    row.className='goal-row'; row.id=goal.id;
+    row.innerHTML=`<div class="goal-dot">✓</div>${goal.label}`;
+    goalsDiv.appendChild(row);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
-// SIMULATION
+// SIMULATION ENGINE
 // ═══════════════════════════════════════════════════════════
 
-let spawnTimer = null;
-let pktId = 0;
+const SPAWN_INTERVAL = 200; // ms between spawn ticks
+let spawnTimer=null, pktId=0;
 
-function toggleSim() {
-  S.sim.on ? stopSim() : startSim();
-}
+function toggleSim() { S.sim.on ? stopSim() : startSim(); }
 
 function startSim() {
-  const sources = Object.values(S.comps).filter(c => TYPES[c.type].isSource);
-  if (sources.length === 0) { hint('⚠️ Place a Client first!'); return; }
-  if (S.conns.length === 0) { hint('⚠️ Connect components first!'); return; }
+  const sources=Object.values(S.comps).filter(c=>TYPES[c.type].isSource);
+  if (!sources.length)    { hint('⚠️ Place a Client first!'); return; }
+  if (!S.conns.length)    { hint('⚠️ Connect components first!'); return; }
 
-  S.sim.on = true;
-  S.sim.pkts = [];
-  document.getElementById('btn-sim').textContent = '⏹ Stop';
+  S.sim.on=true; S.sim.pkts=[];
+  S.sim.recentCompletions=[]; S.sim.recentErrors=[];
+  document.getElementById('btn-sim').innerHTML='⏹ Stop <span class="kbd">Space</span>';
   document.getElementById('btn-sim').classList.add('active');
+  document.getElementById('metrics-bar').classList.add('visible');
+
+  // Reset per-comp tracking
+  for (const comp of Object.values(S.comps)) {
+    comp.arrivalTimes=[]; comp.currentRPS=0; comp._bucket=0; comp.rrIdx=0;
+    if (comp.healthState!=='failed') comp.healthState='healthy';
+  }
+
   setMode('select');
   render();
-
   spawnCycle();
   animLoop();
 }
 
 function stopSim() {
-  S.sim.on = false;
-  S.sim.pkts = [];
+  S.sim.on=false; S.sim.pkts=[];
   clearTimeout(spawnTimer);
   if (S.sim.raf) cancelAnimationFrame(S.sim.raf);
-  document.getElementById('layer-pkts').innerHTML = '';
-  document.getElementById('btn-sim').innerHTML = '▶ Simulate <span class="kbd">Space</span>';
+  document.getElementById('layer-pkts').innerHTML='';
+  document.getElementById('btn-sim').innerHTML='▶ Simulate <span class="kbd">Space</span>';
   document.getElementById('btn-sim').classList.remove('active');
+  document.getElementById('metrics-bar').classList.remove('visible');
+
+  // Reset health states
+  for (const comp of Object.values(S.comps)) {
+    if (comp.healthState!=='failed') comp.healthState='healthy';
+    comp.currentRPS=0;
+  }
   render();
 }
 
 function spawnCycle() {
   if (!S.sim.on) return;
-  const sources = Object.values(S.comps).filter(c => TYPES[c.type].isSource);
+  const sources=Object.values(S.comps).filter(c=>TYPES[c.type].isSource && c.healthState!=='failed');
   for (const src of sources) {
-    const outs = S.conns.filter(c => c.from === src.id);
-    if (outs.length === 0) continue;
-    const conn = outs[src.rrIdx % outs.length];
-    src.rrIdx = (src.rrIdx || 0) + 1;
-    spawnPkt(conn.id, '#58a6ff', 0.012 + Math.random() * 0.006);
+    const rps = src.config?.rps ?? 5;
+    src._bucket=(src._bucket||0)+rps*(SPAWN_INTERVAL/1000);
+    const n=Math.floor(src._bucket); src._bucket-=n;
+    const outs=S.conns.filter(c=>c.from===src.id);
+    if (!outs.length) continue;
+    for (let i=0;i<n;i++) {
+      const conn=outs[src.rrIdx%outs.length]; src.rrIdx++;
+      spawnPkt(conn.id,'#58a6ff',null,0);
+    }
   }
-  spawnTimer = setTimeout(spawnCycle, 1100 + Math.random() * 400);
+  spawnTimer=setTimeout(spawnCycle,SPAWN_INTERVAL);
 }
 
-function spawnPkt(connId, color, speed) {
+function spawnPkt(connId, color, speed, accLatency) {
   if (!connId) return;
-  S.sim.pkts.push({ id: pktId++, connId, t: 0, color, speed });
+  const conn=getConn(connId);
+  if (!conn) return;
+  const destType=S.comps[conn.to]?.type;
+  S.sim.pkts.push({
+    id:pktId++, connId, t:0, color,
+    speed: speed ?? getPacketSpeed(destType),
+    accLatency: accLatency||0,
+  });
 }
 
-function getConn(id) { return S.conns.find(c => c.id === id); }
+function getConn(id) { return S.conns.find(c=>c.id===id); }
+
+function recordArrival(comp) {
+  const now=performance.now();
+  if (!comp.arrivalTimes) comp.arrivalTimes=[];
+  comp.arrivalTimes.push(now);
+  // Prune older than 3 seconds
+  const cutoff=now-3000;
+  let i=0; while(i<comp.arrivalTimes.length&&comp.arrivalTimes[i]<cutoff) i++;
+  if (i>0) comp.arrivalTimes=comp.arrivalTimes.slice(i);
+  // currentRPS = arrivals in last 1 second
+  const win=now-1000;
+  comp.currentRPS=comp.arrivalTimes.filter(t=>t>=win).length;
+  // Update health state
+  if (comp.healthState==='failed') return; // stay failed
+  const t=TYPES[comp.type];
+  const maxRPS=comp.config?.maxRPS ?? t.defaultMaxRPS ?? 99999;
+  if (maxRPS>=100000) { comp.healthState='healthy'; return; }
+  const ratio=comp.currentRPS/maxRPS;
+  comp.healthState = ratio>1.0 ? 'overloaded' : ratio>0.7 ? 'stressed' : 'healthy';
+}
 
 function animLoop() {
   if (!S.sim.on) return;
 
-  const layer = document.getElementById('layer-pkts');
-  layer.innerHTML = '';
+  const pktsLayer=document.getElementById('layer-pkts');
+  pktsLayer.innerHTML='';
+  const dead=[], newPkts=[];
 
-  const dead = [];
-  const newPkts = [];
+  for (let i=0;i<S.sim.pkts.length;i++) {
+    const pkt=S.sim.pkts[i];
+    pkt.t+=pkt.speed;
 
-  for (let i = 0; i < S.sim.pkts.length; i++) {
-    const pkt = S.sim.pkts[i];
-    pkt.t += pkt.speed;
-
-    if (pkt.t >= 1) {
+    if (pkt.t>=1) {
       dead.push(i);
-      // Arrived at destination — propagate
-      const conn = getConn(pkt.connId);
-      if (!conn) continue;
-      const dest = S.comps[conn.to];
-      if (!dest) continue;
-      const dt = TYPES[dest.type];
+      const conn=getConn(pkt.connId); if (!conn) continue;
+      const dest=S.comps[conn.to]; if (!dest) continue;
+      const dt=TYPES[dest.type];
+      const newLat=pkt.accLatency+(dt.baseLatencyMs||0);
 
-      if (dt.isSink) {
-        S.sim.successCount++;
-        if (S.sim.successCount >= 3 && !S.sim.winShown) {
-          S.sim.winShown = true;
-          if (goalsAllMet()) {
-            setTimeout(showWin, 800);
-          }
-        }
+      recordArrival(dest);
+
+      // Failed component → error
+      if (dest.healthState==='failed') {
+        S.sim.recentErrors.push({t:performance.now()});
         continue;
       }
 
-      const outs = S.conns.filter(c => c.from === dest.id);
-      if (outs.length === 0) continue;
+      // Overloaded → probabilistic drop
+      if (dest.healthState==='overloaded') {
+        const maxRPS=dest.config?.maxRPS ?? dt.defaultMaxRPS ?? 99999;
+        if (maxRPS<100000) {
+          const dropRate=Math.min(0.9,Math.max(0,(dest.currentRPS-maxRPS)/Math.max(1,dest.currentRPS)));
+          if (Math.random()<dropRate) {
+            S.sim.recentErrors.push({t:performance.now()});
+            continue;
+          }
+        }
+      }
 
-      if (dt.id === 'load_balancer') {
-        const c = outs[dest.rrIdx % outs.length];
-        dest.rrIdx = (dest.rrIdx || 0) + 1;
-        newPkts.push({ connId: c.id, color: pkt.color, speed: pkt.speed });
-      } else if (dt.id === 'cache') {
-        if (Math.random() < 0.2) {
-          // Cache miss — forward
-          for (const c of outs) newPkts.push({ connId: c.id, color: '#f0883e', speed: pkt.speed * 0.8 });
+      // Reached a SINK
+      if (dt.isSink) {
+        S.sim.successCount++;
+        S.sim.recentCompletions.push({t:performance.now(), latency:newLat});
+        continue;
+      }
+
+      const outs=S.conns.filter(c=>c.from===dest.id);
+      if (!outs.length) continue;
+
+      if (dt.id==='load_balancer') {
+        const next=outs[dest.rrIdx%outs.length]; dest.rrIdx++;
+        newPkts.push({connId:next.id, color:pkt.color, accLatency:newLat});
+      } else if (dt.id==='cache') {
+        const hr=dest.config?.hitRate??0.8;
+        if (Math.random()<hr) {
+          // Cache hit → success
+          S.sim.successCount++;
+          S.sim.recentCompletions.push({t:performance.now(), latency:newLat});
+        } else {
+          // Cache miss → forward
+          for (const c of outs) newPkts.push({connId:c.id,color:'#f0883e',accLatency:newLat});
         }
-        // Cache hit — absorbed, no forward
-      } else if (dt.id === 'cdn') {
-        if (Math.random() > dt.hitRate) {
-          for (const c of outs) newPkts.push({ connId: c.id, color: '#d2a8ff', speed: pkt.speed });
+      } else if (dt.id==='cdn') {
+        const hr=dest.config?.hitRate??0.85;
+        if (Math.random()<hr) {
+          S.sim.successCount++;
+          S.sim.recentCompletions.push({t:performance.now(), latency:newLat});
+        } else {
+          for (const c of outs) newPkts.push({connId:c.id,color:pkt.color,accLatency:newLat});
         }
-      } else if (dt.id === 'message_queue') {
-        setTimeout(() => {
+      } else if (dt.id==='message_queue') {
+        const delay=dest.config?.deliveryDelayMs??800;
+        setTimeout(()=>{
           if (!S.sim.on) return;
-          for (const c of outs) spawnPkt(c.id, '#e3b341', 0.008);
-        }, 700 + Math.random() * 600);
+          for (const c of outs) spawnPkt(c.id,'#e3b341',null,newLat);
+        }, delay+Math.random()*400);
       } else {
-        // Default: forward to all outputs
-        for (const c of outs) newPkts.push({ connId: c.id, color: pkt.color, speed: pkt.speed });
+        for (const c of outs) newPkts.push({connId:c.id,color:pkt.color,accLatency:newLat});
       }
       continue;
     }
 
-    // Draw packet
-    const conn = getConn(pkt.connId);
-    if (!conn) { dead.push(i); continue; }
-    const p = connPath(conn);
-    if (!p) { dead.push(i); continue; }
+    // Draw packet in flight
+    const conn=getConn(pkt.connId); if (!conn) { dead.push(i); continue; }
+    const p=connPath(conn); if (!p) { dead.push(i); continue; }
+    const pos=bezier(pkt.t,p);
 
-    const pos = bezier(pkt.t, p);
-
-    // Glow halo
-    layer.appendChild(el('circle', {
-      cx: pos.x, cy: pos.y, r: 9,
-      fill: pkt.color, opacity: 0.15,
-    }));
-    // Main dot
-    layer.appendChild(el('circle', {
-      cx: pos.x, cy: pos.y, r: 4.5,
-      fill: pkt.color, filter: 'url(#glow-sm)',
-    }));
-    // Inner bright core
-    layer.appendChild(el('circle', {
-      cx: pos.x, cy: pos.y, r: 2.5,
-      fill: '#fff', opacity: 0.75,
-    }));
+    pktsLayer.appendChild(el('circle',{cx:pos.x,cy:pos.y,r:8,fill:pkt.color,opacity:0.12}));
+    pktsLayer.appendChild(el('circle',{cx:pos.x,cy:pos.y,r:4,fill:pkt.color,filter:'url(#glow-sm)'}));
+    pktsLayer.appendChild(el('circle',{cx:pos.x,cy:pos.y,r:2,fill:'#fff',opacity:0.8}));
   }
 
-  // Prune dead
-  for (let i = dead.length - 1; i >= 0; i--) S.sim.pkts.splice(dead[i], 1);
-  // Spawn propagated
-  for (const p of newPkts) spawnPkt(p.connId, p.color, p.speed);
+  // Prune dead packets
+  for (let i=dead.length-1;i>=0;i--) S.sim.pkts.splice(dead[i],1);
+  // Add propagated packets
+  for (const p of newPkts) spawnPkt(p.connId,p.color,null,p.accLatency);
 
-  S.sim.raf = requestAnimationFrame(animLoop);
+  S.sim.raf=requestAnimationFrame(animLoop);
 }
 
 // ═══════════════════════════════════════════════════════════
-// GOALS
+// METRICS
 // ═══════════════════════════════════════════════════════════
 
-function reachable(startId, targetTypeSet) {
-  const visited = new Set();
-  const q = [startId];
-  while (q.length) {
-    const cur = q.shift();
-    if (visited.has(cur)) continue;
-    visited.add(cur);
-    const comp = S.comps[cur];
-    if (!comp) continue;
-    if (targetTypeSet.has(comp.type)) return true;
-    for (const conn of S.conns.filter(c => c.from === cur)) q.push(conn.to);
-  }
-  return false;
+function percentile(sorted, p) {
+  if (!sorted.length) return 0;
+  const idx=Math.ceil((p/100)*sorted.length)-1;
+  return sorted[Math.max(0,Math.min(sorted.length-1,idx))];
 }
 
-function goalsAllMet() {
-  const comps = Object.values(S.comps);
-  const types = new Set(comps.map(c => c.type));
+function computeMetrics() {
+  const now=performance.now();
+  const win=5000; // 5-second sliding window
+  const cutoff=now-win;
+  S.sim.recentCompletions=S.sim.recentCompletions.filter(c=>c.t>cutoff);
+  S.sim.recentErrors=S.sim.recentErrors.filter(e=>e.t>cutoff);
 
-  const hasClient = types.has('client');
-  const hasLB     = types.has('load_balancer');
-  const hasServer = types.has('web_server') || types.has('app_server');
-  const hasDB     = types.has('sql_db') || types.has('nosql_db');
-  if (!hasClient || !hasLB || !hasServer || !hasDB) return false;
+  const total=S.sim.recentCompletions.length+S.sim.recentErrors.length;
+  const rps=total/(win/1000);
+  const throughput=S.sim.recentCompletions.length/(win/1000);
+  const errorRate=total>0?S.sim.recentErrors.length/total:0;
+  const lats=S.sim.recentCompletions.map(c=>c.latency).sort((a,b)=>a-b);
+  const p50=percentile(lats,50), p95=percentile(lats,95), p99=percentile(lats,99);
 
-  const dbTypes = new Set(['sql_db', 'nosql_db']);
-  const serverTypes = new Set(['web_server', 'app_server']);
-  const lbTypes = new Set(['load_balancer']);
-
-  for (const client of comps.filter(c => c.type === 'client')) {
-    if (!reachable(client.id, lbTypes)) continue;
-    for (const lb of comps.filter(c => c.type === 'load_balancer')) {
-      if (!reachable(lb.id, serverTypes)) continue;
-      for (const srv of comps.filter(c => serverTypes.has(c.type))) {
-        if (reachable(srv.id, dbTypes)) return true;
-      }
-    }
-  }
-  return false;
+  S.sim.metrics={ rps, throughput, errorRate, p50, p95, p99, active:S.sim.pkts.length };
 }
+
+function metricColor(val, warnThresh, errThresh) {
+  return val>errThresh?'red':val>warnThresh?'amber':'green';
+}
+
+function renderMetricsPanel() {
+  const m=S.sim.metrics;
+  const set=(id,val,cls)=>{
+    const el=document.getElementById(id);
+    el.textContent=val;
+    el.className='m-val'+(cls?' '+cls:'');
+  };
+  set('m-tput', m.rps<0.1?'—':m.throughput.toFixed(1), m.throughput<1&&m.rps>0?'amber':'green');
+  const errPct=(m.errorRate*100).toFixed(1)+'%';
+  set('m-err', m.rps<0.1?'—':errPct, metricColor(m.errorRate,0.01,0.05));
+  set('m-p50', m.p50?m.p50.toFixed(0)+'ms':'—', metricColor(m.p50,50,200));
+  set('m-p95', m.p95?m.p95.toFixed(0)+'ms':'—', metricColor(m.p95,100,500));
+  set('m-p99', m.p99?m.p99.toFixed(0)+'ms':'—', metricColor(m.p99,200,1000));
+  set('m-flight', m.active||0, '');
+}
+
+// ═══════════════════════════════════════════════════════════
+// GOALS & WIN
+// ═══════════════════════════════════════════════════════════
 
 function checkGoals() {
-  const comps = Object.values(S.comps);
-  const types = new Set(comps.map(c => c.type));
-
-  const hasClient = types.has('client');
-  const hasLB     = types.has('load_balancer');
-  const hasServer = types.has('web_server') || types.has('app_server');
-  const hasDB     = types.has('sql_db') || types.has('nosql_db');
-  const pathOk    = goalsAllMet();
-  const simRan    = S.sim.successCount >= 3;
-
-  markGoal('g-client', hasClient);
-  markGoal('g-lb',     hasLB);
-  markGoal('g-server', hasServer);
-  markGoal('g-db',     hasDB);
-  markGoal('g-path',   pathOk);
-  markGoal('g-sim',    simRan);
+  const lvl=LEVELS[S.currentLevel]; if (!lvl) return;
+  let allMet=true;
+  for (const goal of lvl.goals) {
+    const met=goal.check(S);
+    markGoal(goal.id,met);
+    if (!met) allMet=false;
+  }
+  if (allMet && !S.sim.winShown) {
+    S.sim.winShown=true;
+    setTimeout(showWin, 1200);
+  }
 }
 
 function markGoal(id, done) {
-  const row = document.getElementById(id);
-  if (!row) return;
-  row.classList.toggle('done', done);
+  const row=document.getElementById(id); if (!row) return;
+  row.classList.toggle('done',done);
 }
-
-// ═══════════════════════════════════════════════════════════
-// WIN
-// ═══════════════════════════════════════════════════════════
 
 function showWin() {
-  document.getElementById('win-overlay').style.display = 'flex';
-  S.winShown = true;
+  const lvl=LEVELS[S.currentLevel];
+  document.getElementById('win-title').textContent=lvl?.winTitle||'Level Complete!';
+  document.getElementById('win-sub').textContent=lvl?.winSub||'Well done!';
+  document.getElementById('win-overlay').style.display='flex';
 }
-
-function dismissWin() {
-  document.getElementById('win-overlay').style.display = 'none';
-}
+function dismissWin() { document.getElementById('win-overlay').style.display='none'; }
 
 // ═══════════════════════════════════════════════════════════
 // HINT BAR
 // ═══════════════════════════════════════════════════════════
 
-let hintTimer = null;
+let hintTimer=null;
 function hint(msg) {
-  const bar = document.getElementById('hint-bar');
-  bar.textContent = msg;
-  bar.style.opacity = 1;
+  const bar=document.getElementById('hint-bar');
+  bar.textContent=msg; bar.style.opacity=1;
   clearTimeout(hintTimer);
-  hintTimer = setTimeout(() => bar.style.opacity = 0, 3000);
+  hintTimer=setTimeout(()=>bar.style.opacity=0, 3500);
 }
+
+// ═══════════════════════════════════════════════════════════
+// METRICS + GOALS INTERVAL
+// ═══════════════════════════════════════════════════════════
+
+setInterval(()=>{
+  if (!S.sim.on) return;
+  computeMetrics();
+  renderMetricsPanel();
+  checkGoals();
+  // Refresh inspector live stats without full re-render
+  if (S.selId && S.comps[S.selId] && S.sim.on) renderInspector();
+}, 500);
 
 // ═══════════════════════════════════════════════════════════
 // KEYBOARD
 // ═══════════════════════════════════════════════════════════
 
 document.addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-  const k = e.key.toLowerCase();
-  if (k === 's') setMode('select');
-  if (k === 'c') setMode('connect');
-  if (k === 'd') setMode('delete');
-  if (k === ' ') { e.preventDefault(); toggleSim(); }
-  if (k === 'escape') { S.connFrom = null; S.selId = null; setMode('select'); render(); }
-  if ((k === 'delete' || k === 'backspace') && S.selId && S.mode === 'select') {
-    deleteComp(S.selId);
+  if (e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA') return;
+  const k=e.key.toLowerCase();
+  if (k==='s')     setMode('select');
+  if (k==='c')     setMode('connect');
+  if (k==='d')     setMode('delete');
+  if (k==='b')     setMode('break');
+  if (k===' ')     { e.preventDefault(); toggleSim(); }
+  if (k==='escape'){ S.connFrom=null; S.selId=null; S.selConnId=null; setMode('select'); render(); }
+  if ((k==='delete'||k==='backspace')&&S.mode==='select') {
+    if (S.selId)     deleteComp(S.selId);
+    if (S.selConnId) deleteSelectedConn();
   }
+  if (e.ctrlKey||e.metaKey) {
+    if (k==='z') { e.preventDefault(); undo(); }
+    if (k==='y') { e.preventDefault(); redo(); }
+    if (k==='shift+z') { e.preventDefault(); redo(); }
+  }
+  if (k==='f') fitToScreen();
 });
-
-// ═══════════════════════════════════════════════════════════
-// RESIZE
-// ═══════════════════════════════════════════════════════════
-window.addEventListener('resize', render);
 
 // ═══════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════
 
 buildPalette();
-render();
-hint('👋 Drag components from the left panel onto the canvas to get started!');
+updateCamera();
+updateUndoRedoBtns();
+
+// Try restoring a saved session
+const restored = loadFromStorage();
+if (restored) {
+  render();
+  renderLevelHUD();
+  hint('Session restored. Press Space to simulate.');
+} else {
+  loadLevel(1);
+  hint('👋 Drag components from the left panel. Alt+drag or middle-click to pan. Scroll to zoom.');
+}
+
+window.addEventListener('resize', ()=>{ render(); });
 </script>
 </body>
 </html>
