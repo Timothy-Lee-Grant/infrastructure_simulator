@@ -298,6 +298,9 @@ body.mode-panning #game-svg { cursor: grabbing !important; }
           <marker id="arr-sel" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
             <path d="M0,0.5 L0,5.5 L7,3 z" fill="#58a6ff"/>
           </marker>
+          <marker id="arr-invalid" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+            <path d="M0,0.5 L0,5.5 L7,3 z" fill="#f85149"/>
+          </marker>
           <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
             <feGaussianBlur stdDeviation="3" result="blur"/>
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -394,12 +397,13 @@ const TYPES = {
     id:'client', name:'Client', icon:'🖥️', color:'#58a6ff', bg:'#102040',
     category:'Traffic', w:96, h:68,
     desc:'End users or external services sending requests into your system.',
-    behavior:'SOURCE — generates request packets. The origin of all traffic.',
+    behavior:'SOURCE — generates request packets. Configurable read/write mix.',
     baseLatencyMs: 0,
     defaultMaxRPS: Infinity, isSource: true, maxIn: 0, maxOut: Infinity,
-    defaultConfig: { rps: 5, trafficPattern: 'steady' },
+    defaultConfig: { rps: 5, trafficPattern: 'steady', readWriteRatio: 0.8 },
     configFields: [
       { key:'rps', label:'Requests / sec', type:'number', min:1, max:200, step:1 },
+      { key:'readWriteRatio', label:'Read / Write Mix', type:'range', min:0, max:1, step:0.05 },
       { key:'trafficPattern', label:'Traffic Pattern', type:'select',
         options:[{v:'steady',l:'Steady'},{ v:'spike',l:'Bursty Spikes'}] },
     ],
@@ -409,7 +413,7 @@ const TYPES = {
     category:'Traffic', w:118, h:68,
     desc:'Distributes incoming requests evenly across a pool of servers.',
     behavior:'Round-robin: routes each packet to the next downstream server in order.',
-    baseLatencyMs: 2, defaultMaxRPS: 100000,
+    baseLatencyMs: 1, defaultMaxRPS: 100000,
     maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 100000 },
     configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:500000, step:100 }],
   },
@@ -438,8 +442,8 @@ const TYPES = {
     category:'Compute', w:106, h:68,
     desc:'Handles HTTP requests, serves pages, coordinates with backends.',
     behavior:'Processes requests and forwards data queries downstream.',
-    baseLatencyMs: 15, defaultMaxRPS: 10,
-    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 10 },
+    baseLatencyMs: 10, defaultMaxRPS: 1000,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 1000 },
     configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:100000, step:1 }],
   },
   app_server: {
@@ -447,17 +451,17 @@ const TYPES = {
     category:'Compute', w:106, h:68,
     desc:'Runs application business logic. Stateless — scale horizontally.',
     behavior:'Processes business logic and forwards to the data layer.',
-    baseLatencyMs: 15, defaultMaxRPS: 10,
-    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 10 },
+    baseLatencyMs: 20, defaultMaxRPS: 500,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 500 },
     configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:100000, step:1 }],
   },
   cache: {
     id:'cache', name:'Cache', icon:'⚡', color:'#f0883e', bg:'#2a1500',
     category:'Data', w:92, h:68,
     desc:'In-memory store (Redis/Memcached). Sub-millisecond reads.',
-    behavior:'Hit rate % of requests served instantly. Misses forward to DB.',
-    baseLatencyMs: 1, defaultMaxRPS: 500, hitRate: 0.8,
-    maxIn: Infinity, maxOut: Infinity, defaultConfig: { hitRate: 0.80, maxRPS: 500 },
+    behavior:'READ packets: hit/miss check. WRITE packets: bypass cache, go straight to DB.',
+    baseLatencyMs: 1, defaultMaxRPS: 100000, hitRate: 0.8,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { hitRate: 0.80, maxRPS: 100000 },
     configFields: [
       { key:'hitRate', label:'Cache Hit Rate', type:'range', min:0, max:0.99, step:0.05 },
       { key:'maxRPS', label:'Max RPS', type:'number', min:1, max:1000000, step:100 },
@@ -467,9 +471,9 @@ const TYPES = {
     id:'sql_db', name:'SQL DB', icon:'🗃️', color:'#f78166', bg:'#2a0e0e',
     category:'Data', w:96, h:68,
     desc:'Relational DB (Postgres, MySQL). ACID transactions, strong consistency.',
-    behavior:'SINK — stores data. Packets terminate here. Models write latency.',
-    baseLatencyMs: 20, defaultMaxRPS: 50, isSink: true,
-    maxIn: Infinity, maxOut: 0, defaultConfig: { maxRPS: 50 },
+    behavior:'SINK — accepts both reads and writes. Higher write latency (WAL + fsync).',
+    baseLatencyMs: 20, defaultMaxRPS: 5000, isSink: true,
+    maxIn: Infinity, maxOut: 0, defaultConfig: { maxRPS: 5000 },
     configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:100000, step:10 }],
   },
   nosql_db: {
@@ -477,19 +481,21 @@ const TYPES = {
     category:'Data', w:104, h:68,
     desc:'Document/key-value store (MongoDB, DynamoDB). Horizontal scale.',
     behavior:'SINK — high write throughput, eventual consistency.',
-    baseLatencyMs: 8, defaultMaxRPS: 200, isSink: true,
-    maxIn: Infinity, maxOut: 0, defaultConfig: { maxRPS: 200 },
+    baseLatencyMs: 5, defaultMaxRPS: 50000, isSink: true,
+    maxIn: Infinity, maxOut: 0, defaultConfig: { maxRPS: 50000 },
     configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:500000, step:10 }],
   },
   message_queue: {
     id:'message_queue', name:'Msg Queue', icon:'📨', color:'#e3b341', bg:'#251a00',
-    category:'Messaging', w:104, h:68,
+    category:'Messaging', w:104, h:72,
     desc:'Async broker (Kafka, RabbitMQ). Decouples producers from consumers.',
-    behavior:'Buffers packets and delivers them asynchronously with a configurable delay.',
-    baseLatencyMs: 10, defaultMaxRPS: 10000,
-    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 10000, deliveryDelayMs: 800 },
+    behavior:'Buffers packets; delivers async. Queue fills if consumers too slow.',
+    baseLatencyMs: 5, defaultMaxRPS: 1000000,
+    maxIn: Infinity, maxOut: Infinity,
+    defaultConfig: { maxRPS: 1000000, deliveryDelayMs: 800, maxDepth: 10000 },
     configFields: [
       { key:'deliveryDelayMs', label:'Delivery Delay (ms)', type:'number', min:100, max:5000, step:100 },
+      { key:'maxDepth', label:'Max Queue Depth', type:'number', min:100, max:1000000, step:100 },
     ],
   },
   worker: {
@@ -497,8 +503,8 @@ const TYPES = {
     category:'Messaging', w:96, h:68,
     desc:'Background job processor. Consumes from a queue, does heavy work async.',
     behavior:'Processes tasks slowly but reliably. Low throughput, no user-facing SLA.',
-    baseLatencyMs: 80, defaultMaxRPS: 3,
-    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 3 },
+    baseLatencyMs: 150, defaultMaxRPS: 100,
+    maxIn: Infinity, maxOut: Infinity, defaultConfig: { maxRPS: 100 },
     configFields: [{ key:'maxRPS', label:'Max RPS', type:'number', min:1, max:1000, step:1 }],
   },
 };
@@ -760,6 +766,14 @@ function getPacketSpeed(destTypeId) {
   return Math.max(0.007, Math.min(0.075, 0.025 * (15 / lat)));
 }
 
+// Packet type → visual color
+function packetTypeColor(type) {
+  if (type === 'write')    return '#ffa657'; // orange
+  if (type === 'error')    return '#f85149'; // red
+  if (type === 'response') return '#79c0ff'; // lighter blue (response)
+  return '#58a6ff'; // blue (read, default)
+}
+
 // ═══════════════════════════════════════════════════════════
 // CAMERA EVENTS (PAN + ZOOM)
 // ═══════════════════════════════════════════════════════════
@@ -870,6 +884,7 @@ function placeComp(type, x, y, overrideId, overrideConfig, locked) {
     id, type, x, y, locked: !!locked,
     rrIdx: 0, healthState: 'healthy',
     currentRPS: 0, arrivalTimes: [], _bucket: 0,
+    queueDepth: 0,
     config: { ...(t.defaultConfig||{}), ...(overrideConfig||{}) },
   };
   S.selId = id;
@@ -898,28 +913,46 @@ function renderConns() {
     const p = connPath(conn);
     if (!p) continue;
     const d = `M${p.x1},${p.y1} C${p.c1x},${p.c1y} ${p.c2x},${p.c2y} ${p.x2},${p.y2}`;
-    const isSel = conn.id === S.selConnId;
-    const isLive = S.sim.on;
+    const isSel    = conn.id === S.selConnId;
+    const isLive   = S.sim.on;
+    const isInvalid = conn.valid === false;
 
     // Visible path
+    const stroke = isInvalid ? '#f85149' :
+                   isSel     ? '#58a6ff' :
+                   isLive    ? '#58a6ff' : '#30363d';
     const vp = el('path', {
       d, fill:'none',
-      stroke: isSel ? '#58a6ff' : isLive ? '#58a6ff' : '#30363d',
+      stroke,
       'stroke-width': isSel ? 2.5 : 1.5,
-      'marker-end': isSel ? 'url(#arr-sel)' : isLive ? 'url(#arr-live)' : 'url(#arr)',
-      opacity: isSel ? 1 : isLive ? 0.5 : 0.7,
+      'stroke-dasharray': isInvalid ? '6,4' : 'none',
+      'marker-end': isSel ? 'url(#arr-sel)' : isInvalid ? 'url(#arr-invalid)' : isLive ? 'url(#arr-live)' : 'url(#arr)',
+      opacity: isInvalid ? 0.7 : isSel ? 1 : isLive ? 0.5 : 0.7,
       'pointer-events': 'none',
     });
     layer.appendChild(vp);
+
+    // Invalid: warning icon at midpoint
+    if (isInvalid) {
+      const mid = bezier(0.5, p);
+      const warn = el('text', {
+        x: mid.x, y: mid.y - 10,
+        'text-anchor':'middle', 'dominant-baseline':'middle',
+        'font-size':11, style:'user-select:none; pointer-events:none',
+      });
+      warn.textContent = '⚠️';
+      layer.appendChild(warn);
+    }
 
     // Wide invisible hit area
     const hp = el('path', {
       d, fill:'none', stroke:'transparent', 'stroke-width':16, cursor:'pointer',
     });
-    hp.addEventListener('mouseenter', () => vp.setAttribute('stroke','#8b949e'));
-    hp.addEventListener('mouseleave', () => {
-      vp.setAttribute('stroke', isSel ? '#58a6ff' : isLive ? '#58a6ff' : '#30363d');
+    hp.addEventListener('mouseenter', () => {
+      vp.setAttribute('stroke', isInvalid ? '#ff7b72' : '#8b949e');
+      if (isInvalid && conn.reason) hint(`⚠️ Invalid connection: ${conn.reason}`);
     });
+    hp.addEventListener('mouseleave', () => { vp.setAttribute('stroke', stroke); });
     hp.addEventListener('click', ev => { ev.stopPropagation(); onConnClick(conn.id); });
     layer.appendChild(hp);
   }
@@ -1000,8 +1033,29 @@ function renderComps() {
       g.appendChild(lbl);
     }
 
-    // Load bar (not shown for source or when max is infinite)
-    if (!t.isSource && maxRPS < 100000) {
+    // Queue depth gauge (message_queue only)
+    if (t.id === 'message_queue') {
+      const maxDepth = comp.config?.maxDepth ?? 10000;
+      const depth = comp.queueDepth || 0;
+      const depthRatio = Math.min(1, depth / maxDepth);
+      const bx=5, by=t.h-10, bw=t.w-10;
+      // Track label
+      const dlbl = el('text', {
+        x: t.w/2, y: by-2,
+        'text-anchor':'middle', 'dominant-baseline':'middle',
+        'font-size':7, fill:'#e3b34190',
+        'font-family':"'Segoe UI',system-ui,sans-serif", style:'user-select:none',
+      });
+      dlbl.textContent = depth >= 1000 ? `${(depth/1000).toFixed(1)}k/${(maxDepth/1000).toFixed(0)}k` : `${depth}/${maxDepth}`;
+      g.appendChild(dlbl);
+      g.appendChild(el('rect',{x:bx,y:by,width:bw,height:4,rx:2,fill:'#0d1117'}));
+      if (depthRatio > 0) {
+        const bc = depthRatio >= 1 ? '#f85149' : depthRatio >= 0.8 ? '#f0883e' : '#e3b341';
+        g.appendChild(el('rect',{x:bx,y:by,width:bw*depthRatio,height:4,rx:2,fill:bc}));
+      }
+    }
+    // Load bar (not shown for source, queue, or when max is infinite)
+    else if (!t.isSource && maxRPS < 100000) {
       const bx=5, by=t.h-7, bw=t.w-10;
       g.appendChild(el('rect',{x:bx,y:by,width:bw,height:4,rx:2,fill:'#0d1117'}));
       const fw = bw * Math.min(1, ratio);
@@ -1095,9 +1149,15 @@ function onCompClick(e, id) {
     } else {
       const exists = S.conns.find(c=>c.from===S.connFrom&&c.to===id);
       if (!exists) {
+        const v = validateConnection(S.connFrom, id);
         pushHistory();
-        S.conns.push({ id:'k'+S.uid++, from:S.connFrom, to:id });
-        hint('Connection created!');
+        S.conns.push({ id:'k'+S.uid++, from:S.connFrom, to:id,
+          valid: v.valid, reason: v.reason });
+        if (v.valid) {
+          hint('Connection created!');
+        } else {
+          hint(`⚠️ Invalid: ${v.reason} — connection shown in red and carries no traffic`);
+        }
         saveToStorage();
       } else { hint('Already connected.'); }
       S.connFrom=null; render();
@@ -1225,12 +1285,18 @@ function renderInspector() {
           ${comp.locked && f.key!=='rps'?'disabled':''}
           onchange="onCfgChange('${comp.id}','${f.key}',+this.value);this.previousElementSibling.querySelector('span').textContent=this.value">
       </div>`;
-    if (f.type==='range') return `
+    if (f.type==='range') {
+      const isPercent = f.key.includes('Rate') || f.key === 'hitRate' || f.key === 'readWriteRatio';
+      const dispVal = f.key === 'readWriteRatio'
+        ? Math.round(val*100)+'% reads'
+        : isPercent ? Math.round(val*100)+'%' : val;
+      return `
       <div class="cfg-field">
-        <div class="cfg-label">${f.label} <span>${f.key.includes('Rate')||f.key==='hitRate'?Math.round(val*100)+'%':val}</span></div>
+        <div class="cfg-label">${f.label} <span>${dispVal}</span></div>
         <input class="cfg-range" type="range" min="${f.min}" max="${f.max}" step="${f.step||0.05}" value="${val}"
-          oninput="onCfgChange('${comp.id}','${f.key}',+this.value);this.previousElementSibling.querySelector('span').textContent=(${f.key.includes('Rate')||f.key==='hitRate'}?Math.round(+this.value*100)+'%':+this.value)">
+          oninput="onCfgChange('${comp.id}','${f.key}',+this.value);this.previousElementSibling.querySelector('span').textContent=(${JSON.stringify(f.key==='readWriteRatio')}?Math.round(+this.value*100)+'% reads':${JSON.stringify(isPercent)}?Math.round(+this.value*100)+'%':+this.value)">
       </div>`;
+    }
     if (f.type==='select') return `
       <div class="cfg-field">
         <div class="cfg-label">${f.label}</div>
@@ -1352,6 +1418,7 @@ function startSim() {
   // Reset per-comp tracking
   for (const comp of Object.values(S.comps)) {
     comp.arrivalTimes=[]; comp.currentRPS=0; comp._bucket=0; comp.rrIdx=0;
+    comp.queueDepth=0;
     if (comp.healthState!=='failed') comp.healthState='healthy';
   }
 
@@ -1374,6 +1441,7 @@ function stopSim() {
   for (const comp of Object.values(S.comps)) {
     if (comp.healthState!=='failed') comp.healthState='healthy';
     comp.currentRPS=0;
+    comp.queueDepth=0;
   }
   render();
 }
@@ -1385,29 +1453,77 @@ function spawnCycle() {
     const rps = src.config?.rps ?? 5;
     src._bucket=(src._bucket||0)+rps*(SPAWN_INTERVAL/1000);
     const n=Math.floor(src._bucket); src._bucket-=n;
-    const outs=S.conns.filter(c=>c.from===src.id);
+    const outs=S.conns.filter(c=>c.from===src.id && c.valid!==false);
     if (!outs.length) continue;
+    const rwRatio = src.config?.readWriteRatio ?? 0.8;
     for (let i=0;i<n;i++) {
       const conn=outs[src.rrIdx%outs.length]; src.rrIdx++;
-      spawnPkt(conn.id,'#58a6ff',null,0);
+      const pType = Math.random() < rwRatio ? 'read' : 'write';
+      spawnPkt(conn.id, packetTypeColor(pType), null, 0, pType, []);
     }
   }
   spawnTimer=setTimeout(spawnCycle,SPAWN_INTERVAL);
 }
 
-function spawnPkt(connId, color, speed, accLatency) {
+function spawnPkt(connId, color, speed, accLatency, packetType, path) {
   if (!connId) return;
   const conn=getConn(connId);
   if (!conn) return;
+  // Skip invalid connections in simulation
+  if (conn.valid === false) return;
   const destType=S.comps[conn.to]?.type;
-  S.sim.pkts.push({
-    id:pktId++, connId, t:0, color,
+  const p = {
+    id:pktId++, connId, t:0,
+    color: color ?? packetTypeColor(packetType || 'read'),
     speed: speed ?? getPacketSpeed(destType),
     accLatency: accLatency||0,
-  });
+    packetType: packetType || 'read',
+    path: path ? [...path] : [],
+    isResponse: false,
+  };
+  S.sim.pkts.push(p);
+  return p.id;
+}
+
+function spawnResponsePkt(returnPath, color, totalLatency) {
+  if (!returnPath || !returnPath.length) return;
+  // Response packet travels backwards: t starts at 1, decreases to 0 on each conn
+  const p = {
+    id: pktId++,
+    connId: returnPath[0],
+    t: 1.0,
+    color,
+    speed: 0.04, // fixed visual speed for responses
+    accLatency: totalLatency,
+    packetType: 'response',
+    isResponse: true,
+    returnPath,
+    pathIdx: 0,
+  };
+  S.sim.pkts.push(p);
 }
 
 function getConn(id) { return S.conns.find(c=>c.id===id); }
+
+function validateConnection(fromId, toId) {
+  if (fromId === toId) return { valid:false, reason:'Cannot connect to self' };
+  const from = S.comps[fromId], to = S.comps[toId];
+  if (!from || !to) return { valid:false, reason:'Component not found' };
+  const ft = TYPES[from.type], tt = TYPES[to.type];
+  if (ft.isSink)   return { valid:false, reason:`${ft.name} is a sink — it has no outputs` };
+  if (tt.isSource) return { valid:false, reason:`${tt.name} is a source — it cannot receive connections` };
+  if (ft.maxOut === 0) return { valid:false, reason:`${ft.name} has no outputs` };
+  if (tt.maxIn  === 0) return { valid:false, reason:`${tt.name} has no inputs` };
+  return { valid:true };
+}
+
+function updateQueueHealth(comp) {
+  if (comp.healthState === 'failed') return;
+  const maxDepth = comp.config?.maxDepth ?? 10000;
+  const depth = comp.queueDepth || 0;
+  const ratio = depth / maxDepth;
+  comp.healthState = ratio >= 1.0 ? 'overloaded' : ratio >= 0.8 ? 'stressed' : 'healthy';
+}
 
 function recordArrival(comp) {
   const now=performance.now();
@@ -1420,13 +1536,25 @@ function recordArrival(comp) {
   // currentRPS = arrivals in last 1 second
   const win=now-1000;
   comp.currentRPS=comp.arrivalTimes.filter(t=>t>=win).length;
-  // Update health state
+  // Message queue health is driven by depth, not RPS — handled in updateQueueHealth
+  if (TYPES[comp.type].id === 'message_queue') return;
+  // Update health state based on RPS
   if (comp.healthState==='failed') return; // stay failed
   const t=TYPES[comp.type];
   const maxRPS=comp.config?.maxRPS ?? t.defaultMaxRPS ?? 99999;
   if (maxRPS>=100000) { comp.healthState='healthy'; return; }
   const ratio=comp.currentRPS/maxRPS;
   comp.healthState = ratio>1.0 ? 'overloaded' : ratio>0.7 ? 'stressed' : 'healthy';
+}
+
+function recordCompletion(pkt, fullPath, finalLatency) {
+  S.sim.successCount++;
+  S.sim.recentCompletions.push({t:performance.now(), latency:finalLatency});
+  // Spawn response packet traveling backwards
+  if (fullPath.length > 0) {
+    const returnPath = [...fullPath].reverse();
+    spawnResponsePkt(returnPath, pkt.color, finalLatency);
+  }
 }
 
 function animLoop() {
@@ -1438,14 +1566,50 @@ function animLoop() {
 
   for (let i=0;i<S.sim.pkts.length;i++) {
     const pkt=S.sim.pkts[i];
+
+    // ── Response packet (traveling backward) ─────────────────
+    if (pkt.isResponse) {
+      pkt.t -= pkt.speed;
+      if (pkt.t <= 0) {
+        // Advance to next segment in return path
+        pkt.pathIdx++;
+        if (pkt.pathIdx >= pkt.returnPath.length) {
+          // Reached the source — flash done
+          dead.push(i);
+          // Show brief latency flash near the client source
+          const conn = getConn(pkt.returnPath[pkt.returnPath.length - 1]);
+          const src = conn ? S.comps[conn.from] : null;
+          if (src && TYPES[src.type].isSource) {
+            showLatencyFlash(src, pkt.accLatency);
+          }
+          continue;
+        }
+        pkt.connId = pkt.returnPath[pkt.pathIdx];
+        pkt.t = 1.0;
+      }
+      // Draw response packet (hollow, moving backward)
+      const conn=getConn(pkt.connId); if (!conn) { dead.push(i); continue; }
+      const p=connPath(conn); if (!p) { dead.push(i); continue; }
+      const pos=bezier(pkt.t, p);
+      pktsLayer.appendChild(el('circle',{cx:pos.x,cy:pos.y,r:7,fill:pkt.color,opacity:0.07}));
+      pktsLayer.appendChild(el('circle',{cx:pos.x,cy:pos.y,r:3.5,fill:'none',
+        stroke:pkt.color,'stroke-width':1.5,opacity:0.7}));
+      pktsLayer.appendChild(el('circle',{cx:pos.x,cy:pos.y,r:1.5,fill:pkt.color,opacity:0.9}));
+      continue;
+    }
+
+    // ── Forward packet ────────────────────────────────────────
     pkt.t+=pkt.speed;
 
     if (pkt.t>=1) {
       dead.push(i);
       const conn=getConn(pkt.connId); if (!conn) continue;
+      if (conn.valid === false) continue; // skip invalid connections
       const dest=S.comps[conn.to]; if (!dest) continue;
       const dt=TYPES[dest.type];
       const newLat=pkt.accLatency+(dt.baseLatencyMs||0);
+      // Full path including current connection
+      const fullPath=[...pkt.path, pkt.connId];
 
       recordArrival(dest);
 
@@ -1469,48 +1633,75 @@ function animLoop() {
 
       // Reached a SINK
       if (dt.isSink) {
-        S.sim.successCount++;
-        S.sim.recentCompletions.push({t:performance.now(), latency:newLat});
+        recordCompletion(pkt, fullPath, newLat);
         continue;
       }
 
-      const outs=S.conns.filter(c=>c.from===dest.id);
+      const outs=S.conns.filter(c=>c.from===dest.id && c.valid!==false);
       if (!outs.length) continue;
 
       if (dt.id==='load_balancer') {
         const next=outs[dest.rrIdx%outs.length]; dest.rrIdx++;
-        newPkts.push({connId:next.id, color:pkt.color, accLatency:newLat});
+        newPkts.push({connId:next.id, color:pkt.color, accLatency:newLat,
+          packetType:pkt.packetType, path:fullPath});
+
       } else if (dt.id==='cache') {
-        const hr=dest.config?.hitRate??0.8;
-        if (Math.random()<hr) {
-          // Cache hit → success
-          S.sim.successCount++;
-          S.sim.recentCompletions.push({t:performance.now(), latency:newLat});
+        if (pkt.packetType === 'write') {
+          // Writes bypass the cache — pass straight through to DB
+          for (const c of outs) newPkts.push({connId:c.id, color:pkt.color,
+            accLatency:newLat, packetType:'write', path:fullPath});
         } else {
-          // Cache miss → forward
-          for (const c of outs) newPkts.push({connId:c.id,color:'#f0883e',accLatency:newLat});
+          // Reads: check hit rate
+          const hr=dest.config?.hitRate??0.8;
+          if (Math.random()<hr) {
+            // Cache hit → success + response
+            recordCompletion(pkt, fullPath, newLat);
+          } else {
+            // Cache miss → forward read to DB
+            for (const c of outs) newPkts.push({connId:c.id, color:'#f0883e',
+              accLatency:newLat, packetType:'read', path:fullPath});
+          }
         }
+
       } else if (dt.id==='cdn') {
         const hr=dest.config?.hitRate??0.85;
         if (Math.random()<hr) {
-          S.sim.successCount++;
-          S.sim.recentCompletions.push({t:performance.now(), latency:newLat});
+          recordCompletion(pkt, fullPath, newLat);
         } else {
-          for (const c of outs) newPkts.push({connId:c.id,color:pkt.color,accLatency:newLat});
+          for (const c of outs) newPkts.push({connId:c.id, color:pkt.color,
+            accLatency:newLat, packetType:pkt.packetType, path:fullPath});
         }
+
       } else if (dt.id==='message_queue') {
+        const maxDepth = dest.config?.maxDepth ?? 10000;
+        dest.queueDepth = (dest.queueDepth||0) + 1;
+        updateQueueHealth(dest);
+        // Drop if queue is full
+        if (dest.queueDepth > maxDepth) {
+          dest.queueDepth--;
+          S.sim.recentErrors.push({t:performance.now()});
+          updateQueueHealth(dest);
+          continue;
+        }
         const delay=dest.config?.deliveryDelayMs??800;
+        const savedPath = [...fullPath];
+        const savedColor = pkt.color;
+        const savedType = pkt.packetType;
         setTimeout(()=>{
           if (!S.sim.on) return;
-          for (const c of outs) spawnPkt(c.id,'#e3b341',null,newLat);
+          dest.queueDepth = Math.max(0, (dest.queueDepth||0) - 1);
+          updateQueueHealth(dest);
+          for (const c of outs) spawnPkt(c.id, savedColor, null, newLat, savedType, savedPath);
         }, delay+Math.random()*400);
+
       } else {
-        for (const c of outs) newPkts.push({connId:c.id,color:pkt.color,accLatency:newLat});
+        for (const c of outs) newPkts.push({connId:c.id, color:pkt.color,
+          accLatency:newLat, packetType:pkt.packetType, path:fullPath});
       }
       continue;
     }
 
-    // Draw packet in flight
+    // ── Draw forward packet in flight ─────────────────────────
     const conn=getConn(pkt.connId); if (!conn) { dead.push(i); continue; }
     const p=connPath(conn); if (!p) { dead.push(i); continue; }
     const pos=bezier(pkt.t,p);
@@ -1518,14 +1709,53 @@ function animLoop() {
     pktsLayer.appendChild(el('circle',{cx:pos.x,cy:pos.y,r:8,fill:pkt.color,opacity:0.12}));
     pktsLayer.appendChild(el('circle',{cx:pos.x,cy:pos.y,r:4,fill:pkt.color,filter:'url(#glow-sm)'}));
     pktsLayer.appendChild(el('circle',{cx:pos.x,cy:pos.y,r:2,fill:'#fff',opacity:0.8}));
+    // Write packet: diamond shape marker (extra square rotated 45°)
+    if (pkt.packetType === 'write') {
+      pktsLayer.appendChild(el('rect',{
+        x:pos.x-2.5, y:pos.y-2.5, width:5, height:5,
+        fill:pkt.color, opacity:0.9,
+        transform:`rotate(45,${pos.x},${pos.y})`,
+      }));
+    }
   }
 
-  // Prune dead packets
+  // Prune dead packets (reverse order)
   for (let i=dead.length-1;i>=0;i--) S.sim.pkts.splice(dead[i],1);
-  // Add propagated packets
-  for (const p of newPkts) spawnPkt(p.connId,p.color,null,p.accLatency);
+  // Add propagated forward packets
+  for (const p of newPkts) spawnPkt(p.connId, p.color, null, p.accLatency, p.packetType, p.path);
 
   S.sim.raf=requestAnimationFrame(animLoop);
+}
+
+// Brief "+Xms" latency flash near a component
+const _latencyFlashTimers = {};
+function showLatencyFlash(comp, latencyMs) {
+  const key = comp.id;
+  if (_latencyFlashTimers[key]) return; // debounce
+  _latencyFlashTimers[key] = setTimeout(() => { delete _latencyFlashTimers[key]; }, 600);
+  const t = TYPES[comp.type];
+  const cx = comp.x + t.w / 2;
+  const cy = comp.y - 14;
+  const layer = document.getElementById('layer-pkts');
+  const lbl = el('text', {
+    x: cx, y: cy,
+    'text-anchor': 'middle', 'dominant-baseline': 'middle',
+    'font-size': 9, 'font-weight': '700',
+    fill: latencyMs < 50 ? '#3fb950' : latencyMs < 200 ? '#f0883e' : '#f85149',
+    opacity: 1,
+    'font-family': "'Segoe UI',system-ui,sans-serif",
+    style: 'user-select:none; pointer-events:none',
+  });
+  lbl.textContent = `+${Math.round(latencyMs)}ms`;
+  layer.appendChild(lbl);
+  // Fade out via animation
+  let op = 1, fy = cy;
+  const fade = setInterval(() => {
+    op -= 0.07; fy -= 0.6;
+    if (op <= 0) { clearInterval(fade); lbl.remove(); return; }
+    lbl.setAttribute('opacity', op.toFixed(2));
+    lbl.setAttribute('y', fy.toFixed(1));
+  }, 30);
 }
 
 // ═══════════════════════════════════════════════════════════
