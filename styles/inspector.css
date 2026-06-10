@@ -1,0 +1,37 @@
+/* ── Inspector ──────────────────────────────────────────── */
+#inspector {
+  width: 216px; background: #161b22; border-left: 1px solid #30363d;
+  overflow-y: auto; flex-shrink: 0; padding: 12px;
+}
+#inspector::-webkit-scrollbar { width: 4px; }
+#inspector::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
+.insp-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; color: #6e7681; font-weight: 600; margin-bottom: 3px; }
+.insp-value { font-size: 12px; color: #c9d1d9; margin-bottom: 10px; }
+.insp-desc { font-size: 11px; color: #8b949e; line-height: 1.55; margin-bottom: 10px; }
+.insp-empty { color: #6e7681; font-size: 11px; text-align: center; margin-top: 40px; line-height: 1.6; }
+
+/* Config form */
+.cfg-field { margin-bottom: 10px; }
+.cfg-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; color: #6e7681; font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.cfg-label span { color: #c9d1d9; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cfg-input {
+  width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 5px;
+  color: #c9d1d9; font-size: 12px; padding: 5px 8px;
+}
+.cfg-input:focus { outline: none; border-color: #58a6ff; }
+.cfg-range { width: 100%; accent-color: #58a6ff; }
+.cfg-select {
+  width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 5px;
+  color: #c9d1d9; font-size: 11px; padding: 5px 8px;
+}
+.insp-stat { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.insp-stat-label { font-size: 10px; color: #8b949e; }
+.insp-stat-val { font-size: 11px; font-weight: 700; color: #c9d1d9; font-variant-numeric: tabular-nums; }
+.health-badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border-radius: 12px; font-size: 10px; font-weight: 700; margin-bottom: 10px;
+}
+.health-healthy   { background: #1a3d2a; color: #3fb950; }
+.health-stressed  { background: #3d2a00; color: #f0883e; }
+.health-overloaded { background: #3d1111; color: #f85149; }
+.health-failed    { background: #3d1111; color: #f85149; border: 1px solid #f85149; }

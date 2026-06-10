@@ -1,0 +1,48 @@
+/* ── Header ─────────────────────────────────────────────── */
+#header {
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  flex-shrink: 0;
+}
+#header h1 { font-size: 14px; font-weight: 700; color: #58a6ff; white-space: nowrap; }
+.hdr-sep { width: 1px; height: 20px; background: #30363d; flex-shrink: 0; }
+.hdr-btn {
+  padding: 4px 10px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  background: #21262d;
+  color: #c9d1d9;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 4px;
+  white-space: nowrap;
+}
+.hdr-btn:hover { background: #30363d; border-color: #8b949e; }
+.hdr-btn:disabled { opacity: 0.4; cursor: default; }
+.hdr-btn.active { background: #1f6feb; border-color: #58a6ff; color: #fff; }
+.hdr-btn.connect-btn.active { background: #5a3825; border-color: #ffa657; color: #ffa657; }
+.hdr-btn.delete-btn { color: #f85149; border-color: #f8514930; }
+.hdr-btn.delete-btn:hover, .hdr-btn.delete-btn.active { background: #3d1111; border-color: #f85149; }
+.hdr-btn.break-btn { color: #bc8cff; border-color: #bc8cff30; }
+.hdr-btn.break-btn:hover, .hdr-btn.break-btn.active { background: #2d1a4a; border-color: #bc8cff; }
+.hdr-btn.sim-btn { color: #3fb950; border-color: #3fb95030; }
+.hdr-btn.sim-btn:hover { background: #1a3d2a; border-color: #3fb950; }
+.hdr-btn.sim-btn.active { background: #238636; border-color: #3fb950; color: #fff; }
+.kbd {
+  font-size: 8px; background: #0d1117; border: 1px solid #30363d;
+  border-radius: 3px; padding: 1px 3px; color: #8b949e;
+}
+#header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+#level-sel {
+  background: #21262d; border: 1px solid #30363d; border-radius: 6px;
+  color: #c9d1d9; font-size: 11px; padding: 4px 8px; cursor: pointer;
+}
+#level-sel:focus { outline: none; border-color: #58a6ff; }
+#zoom-pct { font-size: 11px; color: #8b949e; width: 36px; text-align: right; font-variant-numeric: tabular-nums; }

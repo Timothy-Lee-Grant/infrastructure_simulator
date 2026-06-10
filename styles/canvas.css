@@ -1,0 +1,13 @@
+/* ── Canvas ─────────────────────────────────────────────── */
+#canvas-wrap {
+  flex: 1; position: relative; overflow: hidden;
+  background: #0d1117;
+  background-image: radial-gradient(circle, #1c2128 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+#game-svg { width: 100%; height: 100%; display: block; }
+body.mode-select  #game-svg { cursor: default; }
+body.mode-connect #game-svg { cursor: crosshair; }
+body.mode-delete  #game-svg { cursor: not-allowed; }
+body.mode-break   #game-svg { cursor: cell; }
+body.mode-panning #game-svg { cursor: grabbing !important; }
